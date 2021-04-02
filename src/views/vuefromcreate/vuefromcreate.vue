@@ -1,35 +1,37 @@
 <template>
   <Layout>
     <Header>Header</Header>
-    <Content>
-      <Row class="vue-fromc-reate">
-        <Col span="5">
-          <menu class="menu">
-            <h3 class="title">表单控件</h3>
-            <draggable
-              v-model="dragModel"
-              v-bind="{
-                sort: false,
-                group: { name: 'drag-drap', pull: 'clone', put: false },
-              }"
-              animation="300"
-              dragClass="dragClass"
-              ghostClass="ghostClass"
-              chosenClass="chosenClass"
-            >
-              <transition-group tag="section">
-                <div class="drag-item" v-for="(o, i) in dragModel" :key="i">
-                  <Icon :type="o.icon" />
-                  {{ o.title }}
-                </div>
-              </transition-group>
-            </draggable>
-          </menu>
-        </Col>
 
-        <Col span="14">
-          <main class="main">
-            <Form  :class="{ 'void-form': !drapModel.length }">
+    <section class="mu-form-create">
+      <menu class="mu-form-ctrl">
+        <div class="ctrl-group" v-for="(o, i) in dragModel" :key="i">
+          <h4 class="ctrl-title">{{ o.name }}</h4>
+          <draggable
+            v-model="o.ctrl"
+            v-bind="{
+              sort: false,
+              group: { name: 'drag-drap', pull: 'clone', put: false },
+            }"
+            animation="300"
+            dragClass="dragClass"
+            ghostClass="ghostClass"
+            chosenClass="chosenClass"
+          >
+            <transition-group tag="ul">
+              <li class="ctrl-item" v-for="(o, i) in o.ctrl" :key="i + i">
+                <Icon class="icon" :type="o.icon" />
+                <span class="name">{{ o.title }}</span>
+              </li>
+            </transition-group>
+          </draggable>
+        </div>
+      </menu>
+
+      <main class="mu-form-main">
+        <div class="main-head">工作区</div>
+        <div class="main-body">
+          <section class="body-drap-box">
+            <Form :class="{ 'void-form': !drapModel.length }">
               <draggable
                 v-model="drapModel"
                 group="drag-drap"
@@ -52,8 +54,7 @@
                     <div
                       v-if="'input' === o.type"
                       :key="o.key"
-                      :class="{
-                        'form-drap-active':
+                      :class="{ 'form-drap-active':
                           drapActive && drapActive.key === o.key,
                       }"
                       @click.stop="activeCommand(i)"
@@ -293,19 +294,21 @@
                 </transition-group>
               </draggable>
             </Form>
-          </main>
-        </Col>
+          </section>
+        </div>
+      </main>
 
-        <Col span="5">
-          <h3 class="title">属性配置</h3>
-          <aside class="attr">
-            <code>
-              {{ drapActive }}
-            </code>
-          </aside>
-        </Col>
-      </Row>
-    </Content>
+      <aside class="mu-form-attr">
+        <h3 class="title">属性配置</h3>
+        <aside class="attr">
+          <code>
+            <!-- {{ drapActive }} -->
+            {{ drapModel }}
+          </code>
+        </aside>
+      </aside>
+    </section>
+
     <Footer>Footer</Footer>
   </Layout>
 </template>
@@ -382,6 +385,87 @@ export default {
 </script>
 
 <style lang="less">
+.mu-form-create {
+  display: flex;
+  box-sizing: border-box;
+  background-color: white;
+  .mu-form-ctrl {
+    width: 250px;
+    min-width: 250px;
+    text-align: left;
+    border-right: 1px solid #dcdee2;
+    .ctrl-group {
+      padding: 5px;
+      padding-left: 6px;
+      .ctrl-title {
+        padding: 20px 10px 0px;
+      }
+      .ctrl-item {
+        display: inline-block;
+        box-sizing: border-box;
+        margin: 5px;
+        padding: 2px 10px;
+        width: 108px;
+        font-size: 13px;
+        text-align: center;
+        cursor: move;
+        border: 1px dashed #666;
+        color: #666;
+        .icon {
+          font-size: 18px;
+        }
+        .name {
+          display: block;
+        }
+      }
+      .ctrl-item:hover {
+        border: 1px dashed white;
+        background: #2d8cf0;
+        color: white;
+      }
+    }
+  }
+  .mu-form-main {
+    flex: auto;
+    display: flex;
+    flex-direction: column;
+    // align-items: center;
+    min-width: 350px;
+    user-select: none;
+    .main-head {
+      height: 60px;
+    }
+
+    .main-body {
+      position: relative;
+      display: block;
+      width: 100%;
+      height: 100%;
+      background: #f5f5f5;
+      .body-drap-box {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        bottom: 15px;
+        left: 15px;
+        padding: 15px;
+        background: white;
+        outline: 2px dashed #95a3b7;
+        overflow: auto;
+
+        .form-drap-active{
+          position: relative;
+        }
+      }
+    }
+  }
+  .mu-form-attr {
+    width: 300px;
+    min-width: 300px;
+    background: white;
+    border-left: 1px solid #dcdee2;
+  }
+}
 .ghostClass {
   background-color: blue !important;
 }
@@ -461,8 +545,8 @@ export default {
         .form-drap-active {
           position: relative;
           .ivu-form-item {
-            outline: 2px dashed #2d8cf0;
-            border: 1px solid #2d8cf0;
+            outline: 2px solid #2d8cf0;
+            // border: 1px solid #2d8cf0;
           }
           .ivu-form-ctrl {
             display: block;

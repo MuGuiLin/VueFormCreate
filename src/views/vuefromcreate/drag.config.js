@@ -21,23 +21,12 @@
 // group
 
 const dragFlue = [
-    {
-        type: "title",
-        name: "",
-        icon: "md-options",
-        title: "标题",
-        className: "",
-        field: "",
-        value: "",
-    },
-    {
-        type: "layout",
-        name: "",
-        icon: "md-pricetags",
-        title: "布局",
-        className: "",
-    },
-    {
+  {
+    name: "表单控件",
+    icon: "md-options",
+    type: "",
+    ctrl: [
+      {
         type: "input",
         name: "",
         icon: "logo-bitcoin",
@@ -46,36 +35,36 @@ const dragFlue = [
         field: "",
         value: "",
         props: {
-            // input的表单类型 <input type="">：注：有些表单类型form-create和element-ui专门做成了组件，可以在上面的type中直接用，所以下面有些类型如（radio）在这里会无效哦！！
+          // input的表单类型 <input type="">：注：有些表单类型form-create和element-ui专门做成了组件，可以在上面的type中直接用，所以下面有些类型如（radio）在这里会无效哦！！
 
-            // text	默认。定义单行输入字段，用户可在其中输入文本。默认是 20 个字符。
-            // button	定义可点击的按钮（大多与 JavaScript 使用来启动脚本）
-            // checkbox	定义复选框。
-            // color	定义拾色器。
-            // date	定义日期字段（带有 calendar 控件）
-            // datetime	定义日期字段（带有 calendar 和 time 控件）
-            // datetime-local	定义日期字段（带有 calendar 和 time 控件）
-            // month	定义日期字段的月（带有 calendar 控件）
-            // week	定义日期字段的周（带有 calendar 控件）
-            // time	定义日期字段的时、分、秒（带有 time 控件）
-            // email	定义用于 e-mail 地址的文本字段
-            // file	定义输入字段和 "浏览..." 按钮，供文件上传
-            // hidden	定义隐藏输入字段
-            // image	定义图像作为提交按钮
-            // number	定义带有 spinner 控件的数字字段
-            // password	定义密码字段。字段中的字符会被遮蔽。
-            // radio	定义单选按钮。
-            // range	定义带有 slider 控件的数字字段。
-            // reset	定义重置按钮。重置按钮会将所有表单字段重置为初始值。
-            // search	定义用于搜索的文本字段。
-            // submit	定义提交按钮。提交按钮向服务器发送数据。
-            // tel	定义用于电话号码的文本字段。
-            // url	定义用于 URL 的文本字段。
-            type: "text",
-            placeholder: "请输入文本！",
+          // text	默认。定义单行输入字段，用户可在其中输入文本。默认是 20 个字符。
+          // button	定义可点击的按钮（大多与 JavaScript 使用来启动脚本）
+          // checkbox	定义复选框。
+          // color	定义拾色器。
+          // date	定义日期字段（带有 calendar 控件）
+          // datetime	定义日期字段（带有 calendar 和 time 控件）
+          // datetime-local	定义日期字段（带有 calendar 和 time 控件）
+          // month	定义日期字段的月（带有 calendar 控件）
+          // week	定义日期字段的周（带有 calendar 控件）
+          // time	定义日期字段的时、分、秒（带有 time 控件）
+          // email	定义用于 e-mail 地址的文本字段
+          // file	定义输入字段和 "浏览..." 按钮，供文件上传
+          // hidden	定义隐藏输入字段
+          // image	定义图像作为提交按钮
+          // number	定义带有 spinner 控件的数字字段
+          // password	定义密码字段。字段中的字符会被遮蔽。
+          // radio	定义单选按钮。
+          // range	定义带有 slider 控件的数字字段。
+          // reset	定义重置按钮。重置按钮会将所有表单字段重置为初始值。
+          // search	定义用于搜索的文本字段。
+          // submit	定义提交按钮。提交按钮向服务器发送数据。
+          // tel	定义用于电话号码的文本字段。
+          // url	定义用于 URL 的文本字段。
+          type: "text",
+          placeholder: "请输入文本！",
         },
-    },
-    {
+      },
+      {
         type: "input",
         name: "",
         icon: "md-stopwatch",
@@ -84,24 +73,24 @@ const dragFlue = [
         field: "",
         value: "",
         props: {
-            type: "textarea",
-            placeholder: "请输入文本！",
+          type: "textarea",
+          placeholder: "请输入文本！",
         },
-    },
-    {
-      type: "input",
-      name: "",
-      icon: "md-stopwatch",
-      title: "颜色",
-      className: "",
-      field: "",
-      value: "",
-      props: {
+      },
+      {
+        type: "input",
+        name: "",
+        icon: "md-stopwatch",
+        title: "颜色",
+        className: "",
+        field: "",
+        value: "",
+        props: {
           type: "color",
           placeholder: "请输入文本！",
+        },
       },
-  },
-    {
+      {
         type: "switch",
         name: "",
         icon: "ios-switch",
@@ -109,8 +98,8 @@ const dragFlue = [
         className: "",
         field: "",
         value: "",
-    },
-    {
+      },
+      {
         type: "select",
         name: "",
         icon: "ios-arrow-dropdown-circle",
@@ -119,15 +108,15 @@ const dragFlue = [
         field: "",
         value: "",
         props: {
-            placeholder: "请选择！",
+          placeholder: "请选择！",
         },
         options: [
-            { label: "选项1", value: 1 },
-            { label: "选项2", value: 2, disabled: true },
-            { label: "选项3", value: 3 },
+          { label: "选项1", value: 1 },
+          { label: "选项2", value: 2, disabled: true },
+          { label: "选项3", value: 3 },
         ],
-    },
-    {
+      },
+      {
         type: "radio",
         name: "",
         icon: "md-radio-button-on",
@@ -136,12 +125,12 @@ const dragFlue = [
         field: "",
         value: "",
         options: [
-            { label: "选项1", value: 1 },
-            { label: "选项2", value: 2, disabled: true },
-            { label: "选项3", value: 3 },
+          { label: "选项1", value: 1 },
+          { label: "选项2", value: 2, disabled: true },
+          { label: "选项3", value: 3 },
         ],
-    },
-    {
+      },
+      {
         type: "checkbox",
         name: "",
         icon: "md-checkbox",
@@ -150,12 +139,12 @@ const dragFlue = [
         field: "",
         value: [],
         options: [
-            { label: "选项1", value: 1 },
-            { label: "选项2", value: 2 },
-            { label: "选项3", value: 3 },
+          { label: "选项1", value: 1 },
+          { label: "选项2", value: 2 },
+          { label: "选项3", value: 3 },
         ],
-    },
-    {
+      },
+      {
         type: "DatePicker",
         name: "",
         icon: "ios-calendar",
@@ -164,10 +153,27 @@ const dragFlue = [
         field: "",
         value: "",
         props: {
-            placeholder: "请输选择日期！",
+          placeholder: "请输选择日期！",
         },
-    },
-    {
+      },
+
+    ]
+  },
+  {
+    name: "高级组件",
+    icon: "md-options",
+    type: "",
+    ctrl: [
+      {
+        type: "title",
+        name: "",
+        icon: "md-options",
+        title: "标题",
+        className: "",
+        field: "",
+        value: "",
+      },
+      {
         type: "table",
         name: "",
         icon: "ios-grid",
@@ -175,8 +181,8 @@ const dragFlue = [
         className: "",
         field: "",
         value: "",
-    },
-    {
+      },
+      {
         type: "vue-editor",
         name: "",
         icon: "ios-create",
@@ -184,92 +190,116 @@ const dragFlue = [
         className: "",
         field: "editor",
         value: "",
-    },
+      },
+    ]
+  },
+  {
+    name: "布局容器",
+    icon: "md-options",
+    type: 'layout',
+    ctrl: [
+      {
+        type: "table",
+        name: "",
+        icon: "md-pricetags",
+        title: "表格布局",
+        className: "",
+      },
+      {
+        type: "flexbox",
+        name: "",
+        icon: "md-pricetags",
+        title: "盒子布局",
+        className: "",
+      },
+
+    ]
+  }
 ];
 
 // 表单生成规则数组对象  生成规则：http://www.form-create.com/v2/guide/rule.html
 // 生成规则数组中一个对象就是一个表单项（是一个json对象），在里面可以对应的表单名称、类型、属性、值、样式、类名、是否必填、错误提示等。
 const setupFule = [
-    {
-        type: "radio",
-        title: "布局方式",
-        field: "layout",
-        value: "",
-        options: [
-            { value: "1", label: "行内样式" },
-            { value: "2", label: "块级样式" },
-        ],
-        on: {
-            input: (e) => {
-                if ("行内样式" == e) {
-                    this.drapForm.inline = true;
-                    this.drapForm.labelPosition = "left";
-                    this.drapForm.labelWidth = 125;
-                } else {
-                    this.drapForm.inline = false;
-                    this.drapForm.labelPosition = "top";
-                    this.drapForm.labelWidth = undefined;
-                }
-            },
-        },
+  {
+    type: "radio",
+    title: "布局方式",
+    field: "layout",
+    value: "",
+    options: [
+      { value: "1", label: "行内样式" },
+      { value: "2", label: "块级样式" },
+    ],
+    on: {
+      input: (e) => {
+        if ("行内样式" == e) {
+          this.drapForm.inline = true;
+          this.drapForm.labelPosition = "left";
+          this.drapForm.labelWidth = 125;
+        } else {
+          this.drapForm.inline = false;
+          this.drapForm.labelPosition = "top";
+          this.drapForm.labelWidth = undefined;
+        }
+      },
     },
-    {
-        type: "radio",
-        title: "标签对齐",
-        field: "labelLayout",
-        value: "",
-        options: [
-            { value: "1", label: "靠左对齐" },
-            { value: "2", label: "靠右对齐" },
-        ],
-        on: {
-            input: (e) => {
-                this.drapForm.labelPosition = "靠左对齐" == e ? "left" : "right";
-            },
-        },
+  },
+  {
+    type: "radio",
+    title: "标签对齐",
+    field: "labelLayout",
+    value: "",
+    options: [
+      { value: "1", label: "靠左对齐" },
+      { value: "2", label: "靠右对齐" },
+    ],
+    on: {
+      input: (e) => {
+        this.drapForm.labelPosition = "靠左对齐" == e ? "left" : "right";
+      },
     },
-    {
-        type: "input",
-        title: "标签宽度",
-        className: "",
-        field: "labelWidth",
-        value: 100,
-        props: {
-            // input的表单类型 <input type="">：注：有些表单类型form-create和element-ui专门做成了组件，可以在上面的type中直接用，所以下面有些类型如（radio）在这里会无效哦！！
-            // text	默认。定义单行输入字段，用户可在其中输入文本。默认是 20 个字符。
-            // button	定义可点击的按钮（大多与 JavaScript 使用来启动脚本）
-            // checkbox	定义复选框。
-            // color	定义拾色器。
-            // date	定义日期字段（带有 calendar 控件）
-            // datetime	定义日期字段（带有 calendar 和 time 控件）
-            // datetime-local	定义日期字段（带有 calendar 和 time 控件）
-            // month	定义日期字段的月（带有 calendar 控件）
-            // week	定义日期字段的周（带有 calendar 控件）
-            // time	定义日期字段的时、分、秒（带有 time 控件）
-            // email	定义用于 e-mail 地址的文本字段
-            // file	定义输入字段和 "浏览..." 按钮，供文件上传
-            // hidden	定义隐藏输入字段
-            // image	定义图像作为提交按钮
-            // number	定义带有 spinner 控件的数字字段
-            // password	定义密码字段。字段中的字符会被遮蔽。
-            // radio	定义单选按钮。
-            // range	定义带有 slider 控件的数字字段。
-            // reset	定义重置按钮。重置按钮会将所有表单字段重置为初始值。
-            // search	定义用于搜索的文本字段。
-            // submit	定义提交按钮。提交按钮向服务器发送数据。
-            // tel	定义用于电话号码的文本字段。
-            // url	定义用于 URL 的文本字段。
-            type: "number",
-        },
-        on: {
-            input: (e) => {
-                this.drapForm.labelWidth = e;
-            },
-        },
+  },
+  {
+    type: "input",
+    title: "标签宽度",
+    className: "",
+    field: "labelWidth",
+    value: 100,
+    props: {
+      // input的表单类型 <input type="">：注：有些表单类型form-create和element-ui专门做成了组件，可以在上面的type中直接用，所以下面有些类型如（radio）在这里会无效哦！！
+      // text	默认。定义单行输入字段，用户可在其中输入文本。默认是 20 个字符。
+      // button	定义可点击的按钮（大多与 JavaScript 使用来启动脚本）
+      // checkbox	定义复选框。
+      // color	定义拾色器。
+      // date	定义日期字段（带有 calendar 控件）
+      // datetime	定义日期字段（带有 calendar 和 time 控件）
+      // datetime-local	定义日期字段（带有 calendar 和 time 控件）
+      // month	定义日期字段的月（带有 calendar 控件）
+      // week	定义日期字段的周（带有 calendar 控件）
+      // time	定义日期字段的时、分、秒（带有 time 控件）
+      // email	定义用于 e-mail 地址的文本字段
+      // file	定义输入字段和 "浏览..." 按钮，供文件上传
+      // hidden	定义隐藏输入字段
+      // image	定义图像作为提交按钮
+      // number	定义带有 spinner 控件的数字字段
+      // password	定义密码字段。字段中的字符会被遮蔽。
+      // radio	定义单选按钮。
+      // range	定义带有 slider 控件的数字字段。
+      // reset	定义重置按钮。重置按钮会将所有表单字段重置为初始值。
+      // search	定义用于搜索的文本字段。
+      // submit	定义提交按钮。提交按钮向服务器发送数据。
+      // tel	定义用于电话号码的文本字段。
+      // url	定义用于 URL 的文本字段。
+      type: "number",
     },
+    on: {
+      input: (e) => {
+        this.drapForm.labelWidth = e;
+      },
+    },
+  },
 ];
 
 export {
-    dragFlue,
-    setupFule
+  dragFlue,
+  setupFule
 };
