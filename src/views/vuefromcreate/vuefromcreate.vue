@@ -1,7 +1,5 @@
 <template>
   <Layout>
-    <Header>Header</Header>
-
     <section class="mu-form-create">
       <menu class="mu-form-ctrl">
         <div class="ctrl-group" v-for="(o, i) in dragModel" :key="i">
@@ -28,7 +26,29 @@
       </menu>
 
       <main class="mu-form-main">
-        <div class="main-head">工作区</div>
+        <div class="main-head">
+          <Button shape="circle" ghost size="small" type="success" icon="md-eye"
+            >表单预览</Button
+          >
+          <Button
+            shape="circle"
+            ghost
+            size="small"
+            type="info"
+            icon="logo-nodejs"
+            @click="showJson = true"
+            >生成JSON</Button
+          >
+          <Button
+            shape="circle"
+            ghost
+            size="small"
+            type="error"
+            icon="md-trash"
+            @click="clearForm()"
+            >清空表单</Button
+          >
+        </div>
         <div class="main-body">
           <section class="body-drap-box">
             <Form :class="{ 'void-form': !drapModel.length }">
@@ -45,41 +65,42 @@
               >
                 <transition-group class="transition-group" tag="section">
                   <div
-                    class="drap-itme"
+                    class="form-drap-item"
                     v-for="(o, i) in drapModel"
                     :key="o.key + i"
+                    :class="{
+                      'form-drap-active':
+                        drapActive && drapActive.key === o.key,
+                    }"
+                    @mousedown.stop="activeCommand(i)"
                   >
                     <!-- {{ o.title }} -->
                     <!-- 输入框 -->
-                    <div
+
+                    <FormItem
+                      :label="o.title"
                       v-if="'input' === o.type"
                       :key="o.key"
-                      :class="{ 'form-drap-active':
-                          drapActive && drapActive.key === o.key,
-                      }"
-                      @click.stop="activeCommand(i)"
                     >
-                      <FormItem :label="o.title">
-                        <Input
-                          :type="o.props.type || 'text'"
-                          v-model="o.value"
-                          :placeholder="o.props.placeholder"
-                        />
-                      </FormItem>
-                      <div class="ivu-form-ctrl">
-                        <Button
-                          size="small"
-                          type="success"
-                          icon="md-copy"
-                          @click="copyCommand(i)"
-                        ></Button>
-                        <Button
-                          size="small"
-                          type="warning"
-                          icon="md-trash"
-                          @click="removeCommand(i)"
-                        ></Button>
-                      </div>
+                      <Input
+                        :type="o.props.type || 'text'"
+                        v-model="o.value"
+                        :placeholder="o.props.placeholder"
+                      />
+                    </FormItem>
+                    <div class="ivu-form-ctrl">
+                      <Button
+                        size="small"
+                        type="success"
+                        icon="md-copy"
+                        @click="copyCommand(i)"
+                      ></Button>
+                      <Button
+                        size="small"
+                        type="warning"
+                        icon="md-trash"
+                        @click="removeCommand(i)"
+                      ></Button>
                     </div>
 
                     <!-- 文本域 -->
@@ -299,17 +320,38 @@
       </main>
 
       <aside class="mu-form-attr">
-        <h3 class="title">属性配置</h3>
         <aside class="attr">
-          <code>
-            <!-- {{ drapActive }} -->
-            {{ drapModel }}
-          </code>
+          <Tabs size="small">
+            <TabPane label="属性配置" icon="md-options">
+              <div class="attr-setup">
+                <Form>
+                  <FormItem label="控件key">
+                    <Input type="text" v-model="drapActive.key" disabled />
+                  </FormItem>
+                  <FormItem label="控件标题">
+                    <Input type="text" v-model="drapActive.title" />
+                  </FormItem>
+                  <FormItem label="控件内容">
+                    <Input type="text" v-model="drapActive.value" />
+                  </FormItem>
+                  <FormItem label="控件提示">
+                    <Input type="text" v-model="drapActive.props.placeholder" />
+                  </FormItem>
+                </Form>
+              </div>
+            </TabPane>
+            <TabPane label="组件配置" icon="md-settings">组件配置</TabPane>
+            <TabPane label="表单配置" icon="ios-construct">表单配置</TabPane>
+          </Tabs>
         </aside>
       </aside>
     </section>
 
-    <Footer>Footer</Footer>
+    <Modal v-model="showJson" fullscreen title="表单配置JSON数据">
+      <code>
+        {{ drapModel }}
+      </code>
+    </Modal>
   </Layout>
 </template>
 
@@ -324,6 +366,7 @@ export default {
   data() {
     return {
       drag: false,
+      showJson: false,
 
       //定义要被拖拽对象的数组
       dragModel: dragFlue,
@@ -332,7 +375,9 @@ export default {
       drapModel: [],
 
       // 选中的drap
-      drapActive: {},
+      drapActive: {
+        props:{}
+      },
     };
   },
   methods: {
@@ -362,6 +407,8 @@ export default {
       // }
       // this.drapActive = this.drapModel[newIndex];
       //  this.setupForm = this.drapModel[newIndex];
+
+      this.activeCommand(e.newIndex);
     },
 
     // 选中控件
@@ -380,6 +427,19 @@ export default {
     removeCommand(i) {
       this.drapModel.splice(i, 1);
     },
+
+    clearForm() {
+      this.$Modal.confirm({
+        title: "操作提示：",
+        content: "亲：表单清空后将无法恢复，您确定要清空吗？",
+        okText: "我确定",
+        cancelText: "再想想",
+        onOk: () => {
+          this.drapModel = [];
+          this.drapActive = { props:{} };
+        },
+      });
+    },
   },
 };
 </script>
@@ -389,16 +449,18 @@ export default {
   display: flex;
   box-sizing: border-box;
   background-color: white;
+  border: 1px solid #ebeef5;
+  text-align: left;
+  min-height: 90vh;
   .mu-form-ctrl {
     width: 250px;
     min-width: 250px;
-    text-align: left;
     border-right: 1px solid #dcdee2;
     .ctrl-group {
       padding: 5px;
       padding-left: 6px;
       .ctrl-title {
-        padding: 20px 10px 0px;
+        padding: 15px 10px 5px;
       }
       .ctrl-item {
         display: inline-block;
@@ -429,11 +491,17 @@ export default {
     flex: auto;
     display: flex;
     flex-direction: column;
-    // align-items: center;
     min-width: 350px;
     user-select: none;
     .main-head {
-      height: 60px;
+      padding: 12px;
+      height: 50px;
+      button {
+        margin-right: 12px;
+        span {
+          margin: 0;
+        }
+      }
     }
 
     .main-body {
@@ -452,107 +520,42 @@ export default {
         background: white;
         outline: 2px dashed #95a3b7;
         overflow: auto;
-
-        .form-drap-active{
-          position: relative;
-        }
-      }
-    }
-  }
-  .mu-form-attr {
-    width: 300px;
-    min-width: 300px;
-    background: white;
-    border-left: 1px solid #dcdee2;
-  }
-}
-.ghostClass {
-  background-color: blue !important;
-}
-.chosenClass {
-  background-color: #2d8cf0 !important;
-  opacity: 1 !important;
-}
-.dragClass {
-  background-color: blueviolet !important;
-  opacity: 1 !important;
-  box-shadow: none !important;
-  outline: none !important;
-  background-image: none !important;
-}
-
-.vue-fromc-reate {
-  display: flex;
-  height: 80vh;
-  border: 1px solid #dcdee2;
-
-  .menu {
-    width: 300px;
-    min-width: 300px;
-    border-right: 1px solid #dcdee2;
-    // background-color: #24292e;
-    .form-ctrl-h3 {
-      padding: 20px 10px 0px;
-      text-align: left;
-    }
-
-    .drag-item {
-      display: inline-block;
-      margin: 10px;
-      padding: 10px;
-      width: 129px;
-      font-size: 15px;
-      text-align: left;
-      cursor: move;
-      border: 1px dashed #2d8cf0;
-      background: white;
-      color: #2d8cf0;
-      .ivu-icon {
-        font-size: 20px;
-      }
-    }
-  }
-
-  .main {
-    flex: 1;
-    height: 100%;
-    background-color: #fafafa;
-    /*空白时显示拖拽提示*/
-    .ivu-form {
-      position: relative;
-      box-sizing: border-box;
-      padding: 10px;
-      min-height: calc(100% - 20px);
-      background-color: white;
-      border: 3px dashed #95a3b7;
-      > div {
-        min-height: calc(100%);
-        overflow-y: auto;
-        .ivu-form-item {
-          display: block;
-          margin: 10px 6px;
-          padding: 5px;
-          text-align: left;
-          outline: 1px dashed #95a3b7;
-        }
-        .ivu-form-ctrl {
-          display: none;
+        .void-form::before {
+          content: "请从左侧拖入表单控件！";
           position: absolute;
-          right: 8px;
-          bottom: 0;
+          left: 0;
+          top: 40%;
+          width: 100%;
+          text-align: center;
+          font-size: 24px;
+          color: #dcdee2;
         }
-
-        .form-drap-active {
+        .form-drap-item {
           position: relative;
+          display: block;
+
           .ivu-form-item {
-            outline: 2px solid #2d8cf0;
-            // border: 1px solid #2d8cf0;
+            display: block;
+            margin: 6px 0;
+            padding: 6px;
+            // outline: 1px dashed #95a3b7;
+          }
+          .ivu-form-ctrl {
+            display: none;
+            position: absolute;
+            top: 2px;
+            right: 4px;
+          }
+        }
+        .form-drap-active {
+          .ivu-form-item {
+            border: 2px dashed #2d8cf0;
           }
           .ivu-form-ctrl {
             display: block;
             button.ivu-btn {
               opacity: 0.5;
-              margin: 5px;
+              margin: 4px;
               line-height: 0;
               text-align: center;
               font-size: 16px;
@@ -564,24 +567,54 @@ export default {
         }
       }
     }
-    .void-form::before {
-      content: "请拖入表单控件！";
-      position: absolute;
-      left: 0;
-      top: 40%;
-      width: 100%;
-      text-align: center;
-      font-size: 24px;
-      color: #dcdee2;
-    }
   }
-
-  .attr {
+  .mu-form-attr {
     width: 300px;
     min-width: 300px;
-    max-height: 100%;
-    overflow: auto;
+    background: white;
     border-left: 1px solid #dcdee2;
+    .ivu-tabs {
+      .ivu-tabs-bar {
+        .ivu-tabs-nav {
+          .ivu-tabs-tab {
+            padding: 16px;
+            .ivu-icon {
+              font-size: 16px;
+              margin-right: 0;
+            }
+          }
+        }
+      }
+      .ivu-tabs-content {
+        .attr-setup {
+          padding: 12px;
+          .ivu-form-item {
+            margin-bottom: 6px;
+          }
+        }
+      }
+    }
   }
+}
+
+.ghostClass,
+.chosenClass {
+  background-color: #2d8cf0 !important;
+  opacity: 1 !important;
+  font-size: 0;
+  color: white;
+  border: 1px solid #2d8cf0;
+  min-height: 5px;
+  .ivu-form-item-label {
+    color: white;
+  }
+}
+
+.dragClass {
+  background-color: blueviolet !important;
+  opacity: 1 !important;
+  box-shadow: none !important;
+  outline: none !important;
+  background-image: none !important;
 }
 </style>
