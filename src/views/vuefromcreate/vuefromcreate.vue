@@ -11,9 +11,9 @@
               group: { name: 'drag-drap', pull: 'clone', put: false },
             }"
             animation="300"
-            dragClass="dragClass"
-            ghostClass="ghostClass"
-            chosenClass="chosenClass"
+            dragClass="drag-class"
+            ghostClass="ghost-class"
+            chosenClass="chosen-class"
           >
             <transition-group tag="ul">
               <li class="ctrl-item" v-for="(o, i) in o.ctrl" :key="i + i">
@@ -27,8 +27,14 @@
 
       <main class="mu-form-main">
         <div class="main-head">
-          <Button shape="circle" ghost size="small" type="success" icon="md-eye"
-            >表单预览</Button
+          <Button
+            shape="circle"
+            ghost
+            size="small"
+            type="success"
+            icon="md-eye"
+            @click="viewForm()"
+            >预览表单</Button
           >
           <Button
             shape="circle"
@@ -36,7 +42,7 @@
             size="small"
             type="info"
             icon="logo-nodejs"
-            @click="showJson = true"
+            @click="createJson()"
             >生成JSON</Button
           >
           <Button
@@ -51,14 +57,18 @@
         </div>
         <div class="main-body">
           <section class="body-drap-box">
-            <Form :class="{ 'void-form': !drapModel.length }">
+            <Form
+              class="body-drap-form"
+              :class="{ 'void-form': !drapModel.length }"
+            >
               <draggable
                 v-model="drapModel"
                 group="drag-drap"
                 animation="300"
-                dragClass="dragClass"
-                ghostClass="ghostClass"
-                chosenClass="chosenClass"
+                dragClass="drag-class"
+                ghostClass="ghost-class"
+                chosenClass="chosen-class"
+                :move="drapMove"
                 @start="onStart"
                 @end="onEnd"
                 @add="drapAdd"
@@ -325,18 +335,20 @@
             <TabPane label="属性配置" icon="md-options">
               <div class="attr-setup">
                 <Form>
-                  <FormItem label="控件key">
+                  <Divider orientation="left">基本属性</Divider>
+                  <FormItem label="ID">
                     <Input type="text" v-model="drapActive.key" disabled />
                   </FormItem>
-                  <FormItem label="控件标题">
+                  <FormItem label="标题">
                     <Input type="text" v-model="drapActive.title" />
                   </FormItem>
-                  <FormItem label="控件内容">
+                  <FormItem label="值">
                     <Input type="text" v-model="drapActive.value" />
                   </FormItem>
-                  <FormItem label="控件提示">
+                  <FormItem label="占位符" v-if="drapActive.props">
                     <Input type="text" v-model="drapActive.props.placeholder" />
                   </FormItem>
+                  <Divider orientation="left">专有属性</Divider>
                 </Form>
               </div>
             </TabPane>
@@ -347,8 +359,16 @@
       </aside>
     </section>
 
+    <Modal v-model="showView" footer-hide title="表单生成预览">
+      <form-create
+        v-model="viewModel.model"
+        :rule="viewModel.rule"
+        :option="viewModel.option"
+      ></form-create>
+    </Modal>
+
     <Modal v-model="showJson" fullscreen title="表单配置JSON数据">
-      <code>
+      <code class="json-code">
         {{ drapModel }}
       </code>
     </Modal>
@@ -366,6 +386,7 @@ export default {
   data() {
     return {
       drag: false,
+      showView: false,
       showJson: false,
 
       //定义要被拖拽对象的数组
@@ -376,7 +397,31 @@ export default {
 
       // 选中的drap
       drapActive: {
-        props:{}
+        props: {},
+      },
+
+      // 预览表单
+      viewModel: {
+        model: {},
+        rule: [],
+        option: {
+          resetBtn: false,
+          form: {
+            inline: false,
+            labelPosition: "left",
+            labelWidth: 60,
+            showMessage: true,
+            autocomplete: "off",
+            size: undefined,
+          },
+          onSubmit: (formData) => {
+            alert("获取表单中的数据：" + JSON.stringify(formData));
+            console.log("获取表单中的数据：", formData);
+            // this.viewModel.model.btn.loading();
+            // this.viewModel.model.resetBtn.disabled();
+            // this.viewModel.model.btn.finish();
+          },
+        },
       },
     };
   },
@@ -393,7 +438,6 @@ export default {
     // 添加控件
     drapAdd(e) {
       console.log("add---------", e);
-
       const newIndex = e.newIndex;
       const local = this.drapModel[newIndex];
       this.$set(this.drapModel, newIndex, {
@@ -405,10 +449,19 @@ export default {
       //     ...this.outil.agn(this.drapModel[newIndex]),
       //   });
       // }
-      // this.drapActive = this.drapModel[newIndex];
-      //  this.setupForm = this.drapModel[newIndex];
-
       this.activeCommand(e.newIndex);
+    },
+
+    drapMove(e) {
+      console.log("表单元素移动中...", e);
+      // 目标是容器不可拖入
+      if (undefined != e.relatedContext.element){
+
+        if(e.relatedContext.element.type === "container") return false;
+
+         // 布局容器不允许容器停靠
+        if (e.draggedContext.element.type ===  "container") return false;
+      }
     },
 
     // 选中控件
@@ -428,6 +481,26 @@ export default {
       this.drapModel.splice(i, 1);
     },
 
+    // 预览表单
+    viewForm() {
+      if (this.drapModel.length) {
+        this.showView = true;
+        this.viewModel.rule = this.drapModel;
+      } else {
+        this.$Message.warning('对不起：没有可预览的表单！');
+      }
+    },
+
+    // 生成JSON
+    createJson() {
+      if (this.drapModel.length) {
+        this.showJson = true;
+      } else {
+        this.$Message.warning('对不起：没有可生成的表单！');
+      }
+    },
+
+    // 清空表单
     clearForm() {
       this.$Modal.confirm({
         title: "操作提示：",
@@ -436,7 +509,7 @@ export default {
         cancelText: "再想想",
         onOk: () => {
           this.drapModel = [];
-          this.drapActive = { props:{} };
+          this.drapActive = { props: {} };
         },
       });
     },
@@ -520,6 +593,15 @@ export default {
         background: white;
         outline: 2px dashed #95a3b7;
         overflow: auto;
+        .body-drap-form {
+          box-sizing: border-box;
+          display: block;
+          height: 100%;
+          > div,
+          .transition-group {
+            height: 90%;
+          }
+        }
         .void-form::before {
           content: "请从左侧拖入表单控件！";
           position: absolute;
@@ -550,6 +632,7 @@ export default {
         .form-drap-active {
           .ivu-form-item {
             border: 2px dashed #2d8cf0;
+            outline: 1px dashed #2d8cf0;
           }
           .ivu-form-ctrl {
             display: block;
@@ -597,24 +680,55 @@ export default {
   }
 }
 
-.ghostClass,
-.chosenClass {
+.ghost-class,
+.chosen-class {
+  position: relative;
   background-color: #2d8cf0 !important;
   opacity: 1 !important;
   font-size: 0;
   color: white;
   border: 1px solid #2d8cf0;
-  min-height: 5px;
+  min-height: 6px;
   .ivu-form-item-label {
     color: white;
   }
 }
 
-.dragClass {
+// .ghost-class::before {
+//   content: "";
+//   position: absolute;
+//   top: -6px;
+//   left: -2px;
+//   width: 0;
+//   height: 0;
+//   border-top: 8px solid transparent;
+//   border-left: 18px solid #2d8cf0;
+//   border-bottom: 8px solid transparent;
+// }
+// .ghost-class::after {
+//   content: "";
+//   position: absolute;
+//   top: -6px;
+//   right: -2px;
+//   width: 0;
+//   height: 0;
+//   border-top: 8px solid transparent;
+//   border-right: 18px solid #2d8cf0;
+//   border-bottom: 8px solid transparent;
+// }
+
+.drag-class {
   background-color: blueviolet !important;
+  // background-color: #2d8cf0 !important;
   opacity: 1 !important;
   box-shadow: none !important;
   outline: none !important;
   background-image: none !important;
+}
+
+.json-code{
+  background: #333;
+  color: white;
+  font-size: 12px;
 }
 </style>
