@@ -147,48 +147,8 @@
                       </div>
                     </div> -->
 
-                    <!-- 日期 -->
-                    <div
-                      v-if="'DatePicker' === o.type"
-                      :key="o.key"
-                      :class="{
-                        'form-drap-active':
-                          drapActive && drapActive.key === o.key,
-                      }"
-                      @click.stop="activeCommand(i)"
-                    >
-                      <FormItem :label="o.title">
-                        <DatePicker
-                          type="date"
-                          :placeholder="o.props.placeholder"
-                        ></DatePicker>
-                      </FormItem>
-                      <div class="ivu-form-ctrl">
-                        <Button
-                          size="small"
-                          type="success"
-                          icon="md-copy"
-                          @click="copyCommand(i)"
-                        ></Button>
-                        <Button
-                          size="small"
-                          type="warning"
-                          icon="md-trash"
-                          @click="removeCommand(i)"
-                        ></Button>
-                      </div>
-                    </div>
-
                     <!-- 单选框 -->
-                    <div
-                      v-if="'radio' === o.type"
-                      :key="o.key"
-                      :class="{
-                        'form-drap-active':
-                          drapActive && drapActive.key === o.key,
-                      }"
-                      @click.stop="activeCommand(i)"
-                    >
+                    <div v-if="'radio' === o.type" :key="o.key">
                       <FormItem :label="o.title">
                         <RadioGroup v-model="o.value">
                           <Radio
@@ -217,15 +177,7 @@
                     </div>
 
                     <!-- 复选框 -->
-                    <div
-                      v-if="'checkbox' === o.type"
-                      :key="o.key"
-                      :class="{
-                        'form-drap-active':
-                          drapActive && drapActive.key === o.key,
-                      }"
-                      @click.stop="activeCommand(i)"
-                    >
+                    <div v-if="'checkbox' === o.type" :key="o.key">
                       <FormItem :label="o.title">
                         <CheckboxGroup v-model="o.value">
                           <Checkbox
@@ -253,16 +205,36 @@
                       </div>
                     </div>
 
+                    <!-- 下拉框 -->
+                    <div v-if="'select' === o.type" :key="o.key">
+                      <FormItem :label="o.title">
+                        <Select v-model="o.value">
+                          <Option
+                            v-for="o in o.options"
+                            :value="o.value"
+                            :key="o.value"
+                            >{{ o.label }}</Option
+                          >
+                        </Select>
+                      </FormItem>
+                      <div class="ivu-form-ctrl">
+                        <Button
+                          size="small"
+                          type="success"
+                          icon="md-copy"
+                          @click="copyCommand(i)"
+                        ></Button>
+                        <Button
+                          size="small"
+                          type="warning"
+                          icon="md-trash"
+                          @click="removeCommand(i)"
+                        ></Button>
+                      </div>
+                    </div>
+
                     <!-- 开关 -->
-                    <div
-                      v-if="'switch' === o.type"
-                      :key="o.key"
-                      :class="{
-                        'form-drap-active':
-                          drapActive && drapActive.key === o.key,
-                      }"
-                      @click.stop="activeCommand(i)"
-                    >
+                    <div v-if="'switch' === o.type" :key="o.key">
                       <FormItem :label="o.title">
                         <Switch v-model="o.value" size="large" />
                         <Switch size="large" style="width: 200px">
@@ -286,25 +258,81 @@
                       </div>
                     </div>
 
-                    <!-- 下拉框 -->
-                    <div
-                      v-if="'select' === o.type"
-                      :key="o.key"
-                      :class="{
-                        'form-drap-active':
-                          drapActive && drapActive.key === o.key,
-                      }"
-                      @click.stop="activeCommand(i)"
-                    >
+                    <!-- 滑块 -->
+                    <div v-if="'slider' === o.type" :key="o.key">
                       <FormItem :label="o.title">
-                        <Select v-model="o.value">
-                          <Option
-                            v-for="o in o.options"
-                            :value="o.value"
-                            :key="o.value"
-                            >{{ o.label }}</Option
-                          >
-                        </Select>
+                        <Slider v-model="o.value"></Slider>
+                      </FormItem>
+                      <div class="ivu-form-ctrl">
+                        <Button
+                          size="small"
+                          type="success"
+                          icon="md-copy"
+                          @click="copyCommand(i)"
+                        ></Button>
+                        <Button
+                          size="small"
+                          type="warning"
+                          icon="md-trash"
+                          @click="removeCommand(i)"
+                        ></Button>
+                      </div>
+                    </div>
+
+                    <!-- 日期 -->
+                    <div v-if="'datepicker' === o.type" :key="o.key">
+                      <FormItem :label="o.title">
+                        <DatePicker
+                          type="date"
+                          v-model="o.value"
+                          :placeholder="o.props.placeholder"
+                        ></DatePicker>
+                      </FormItem>
+                      <div class="ivu-form-ctrl">
+                        <Button
+                          size="small"
+                          type="success"
+                          icon="md-copy"
+                          @click="copyCommand(i)"
+                        ></Button>
+                        <Button
+                          size="small"
+                          type="warning"
+                          icon="md-trash"
+                          @click="removeCommand(i)"
+                        ></Button>
+                      </div>
+                    </div>
+
+                    <!-- 时间 -->
+                    <div v-if="'timepicker' === o.type" :key="o.key">
+                      <FormItem :label="o.title">
+                        <TimePicker
+                          type="time"
+                          v-model="o.value"
+                          :placeholder="o.props.placeholder"
+                        ></TimePicker>
+                      </FormItem>
+                      <div class="ivu-form-ctrl">
+                        <Button
+                          size="small"
+                          type="success"
+                          icon="md-copy"
+                          @click="copyCommand(i)"
+                        ></Button>
+                        <Button
+                          size="small"
+                          type="warning"
+                          icon="md-trash"
+                          @click="removeCommand(i)"
+                        ></Button>
+                      </div>
+                    </div>
+
+                    <!-- 评分 -->
+                    <div v-if="'rate' === o.type" :key="o.key">
+                      <FormItem :label="o.title">
+                        <Rate v-model="o.value" />
                       </FormItem>
                       <div class="ivu-form-ctrl">
                         <Button
@@ -368,15 +396,16 @@
     </Modal>
 
     <Modal v-model="showJson" fullscreen title="表单配置JSON数据">
-      <code class="json-code">
+      <div class="monaco-editor" id="monacoEditor" ref="monacoEditor">
         {{ drapModel }}
-      </code>
+      </div>
     </Modal>
   </Layout>
 </template>
 
 <script>
 import draggable from "vuedraggable";
+import * as monaco from "monaco-editor";
 import { dragFlue } from "./drag.config.js";
 export default {
   name: "VueFromCreate",
@@ -423,7 +452,20 @@ export default {
           },
         },
       },
+
+      monacoEditor: '',
     };
+  },
+  mounted() {
+    this.monacoEditor = monaco.editor.create(this.$refs["monacoEditor"], {
+      value: {}, //编辑器初始显示文字
+      language: "javascript", //语言支持自行查阅demo
+      theme: "vs-dark", //官方自带三种主题vs, hc-black, or vs-dark
+      fontSize: 28, //字体大小
+      automaticLayout: true, //自动布局
+      readOnly: true, // 不能编辑
+      selectOnLineNumbers: true, //显示行号
+    });
   },
   methods: {
     //开始拖拽事件
@@ -455,12 +497,11 @@ export default {
     drapMove(e) {
       console.log("表单元素移动中...", e);
       // 目标是容器不可拖入
-      if (undefined != e.relatedContext.element){
+      if (undefined != e.relatedContext.element) {
+        if (e.relatedContext.element.type === "container") return false;
 
-        if(e.relatedContext.element.type === "container") return false;
-
-         // 布局容器不允许容器停靠
-        if (e.draggedContext.element.type ===  "container") return false;
+        // 布局容器不允许容器停靠
+        if (e.draggedContext.element.type === "container") return false;
       }
     },
 
@@ -487,16 +528,18 @@ export default {
         this.showView = true;
         this.viewModel.rule = this.drapModel;
       } else {
-        this.$Message.warning('对不起：没有可预览的表单！');
+        this.$Message.warning("对不起：没有可预览的表单！");
       }
     },
 
     // 生成JSON
     createJson() {
       if (this.drapModel.length) {
+        // this.monacoEditor.dispose();
+        // this.monacoEditor.setValue(this.drapModel);
         this.showJson = true;
       } else {
-        this.$Message.warning('对不起：没有可生成的表单！');
+        this.$Message.warning("对不起：没有可生成的表单！");
       }
     },
 
@@ -726,9 +769,10 @@ export default {
   background-image: none !important;
 }
 
-.json-code{
-  background: #333;
+.monaco-editor {
+  padding: 10px;
+  height: 100%;
+  font-size: 15px;
   color: white;
-  font-size: 12px;
 }
 </style>

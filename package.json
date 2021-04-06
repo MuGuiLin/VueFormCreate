@@ -10,6 +10,7 @@
   "dependencies": {
     "@form-create/iview4": "^2.5.2",
     "core-js": "^3.6.5",
+    "monaco-editor": "^0.23.0",
     "view-design": "^4.5.0",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0",
