@@ -453,7 +453,7 @@ export default {
         },
       },
 
-      monacoEditor: '',
+      monacoEditor: "",
     };
   },
   mounted() {
@@ -575,6 +575,7 @@ export default {
     .ctrl-group {
       padding: 5px;
       padding-left: 6px;
+      user-select: none;
       .ctrl-title {
         padding: 15px 10px 5px;
       }
@@ -663,7 +664,8 @@ export default {
             display: block;
             margin: 6px 0;
             padding: 6px;
-            // outline: 1px dashed #95a3b7;
+            border: 2px dashed transparent;
+            outline: 1px dashed transparent;
           }
           .ivu-form-ctrl {
             display: none;
@@ -672,10 +674,13 @@ export default {
             right: 4px;
           }
         }
+        .form-drap-item:active{
+          cursor: move;
+        }
         .form-drap-active {
           .ivu-form-item {
-            border: 2px dashed #2d8cf0;
-            outline: 1px dashed #2d8cf0;
+            border-color: #2d8cf0;
+            outline-color: #2d8cf0;
           }
           .ivu-form-ctrl {
             display: block;
@@ -726,12 +731,11 @@ export default {
 .ghost-class,
 .chosen-class {
   position: relative;
-  background-color: #2d8cf0 !important;
-  opacity: 1 !important;
+  min-height: 6px;
   font-size: 0;
   color: white;
-  border: 1px solid #2d8cf0;
-  min-height: 6px;
+  opacity: 1 !important;
+  background-color: #2d8cf0 !important;
   .ivu-form-item-label {
     color: white;
   }
