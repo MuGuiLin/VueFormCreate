@@ -7,7 +7,10 @@ import store from './store'
 import ViewUI from 'view-design'
 import 'view-design/dist/styles/iview.css'
 
+import FcEditor from "@form-create/component-wangeditor"
 import formCreate from '@form-create/iview'
+
+formCreate.component('editor', FcEditor)
 
 Vue.config.productionTip = false
 

@@ -236,8 +236,7 @@
                     <!-- 开关 -->
                     <div v-if="'switch' === o.type" :key="o.key">
                       <FormItem :label="o.title">
-                        <Switch v-model="o.value" size="large" />
-                        <Switch size="large" style="width: 200px">
+                        <Switch v-model="o.value" size="large">
                           <span slot="open">开启</span>
                           <span slot="close">关闭</span>
                         </Switch>
@@ -387,7 +386,13 @@
       </aside>
     </section>
 
-    <Modal v-model="showView" footer-hide title="表单生成预览">
+    <Modal
+      v-model="showView"
+      footer-hide
+      width="680"
+      :lock-scroll="true"
+      title="表单生成预览"
+    >
       <form-create
         v-model="viewModel.model"
         :rule="viewModel.rule"
@@ -395,9 +400,14 @@
       ></form-create>
     </Modal>
 
-    <Modal v-model="showJson" fullscreen title="表单配置JSON数据">
+    <Modal
+      v-model="showJson"
+      fullscreen
+      title="表单配置JSON数据"
+      okText="下载JSON"
+    >
       <div class="monaco-editor" id="monacoEditor" ref="monacoEditor">
-        {{ drapModel }}
+        <!-- {{ drapModel }} -->
       </div>
     </Modal>
   </Layout>
@@ -405,7 +415,10 @@
 
 <script>
 import draggable from "vuedraggable";
-import * as monaco from "monaco-editor";
+
+// import * as monaco from "monaco-editor";
+import * as monaco from 'monaco-editor/esm/vs/editor/editor.main.js';
+
 import { dragFlue } from "./drag.config.js";
 export default {
   name: "VueFromCreate",
@@ -458,12 +471,15 @@ export default {
   },
   mounted() {
     this.monacoEditor = monaco.editor.create(this.$refs["monacoEditor"], {
-      value: {}, //编辑器初始显示文字
-      language: "javascript", //语言支持自行查阅demo
+      value: "", //编辑器初始显示文字
+      // language: "javascript", //语言支持自行查阅demo
+      language: "json", //语言支持自行查阅demo
       theme: "vs-dark", //官方自带三种主题vs, hc-black, or vs-dark
-      fontSize: 28, //字体大小
+      fontSize: 16, //字体大小
       automaticLayout: true, //自动布局
-      readOnly: true, // 不能编辑
+      readOnly: false, // 不能编辑
+      lineHeight: 24,  // 行高
+      // fontFamily: 'Microsoft YaHei', //字体
       selectOnLineNumbers: true, //显示行号
     });
   },
@@ -485,6 +501,7 @@ export default {
       this.$set(this.drapModel, newIndex, {
         ...local,
         key: `${local.type}_${new Date().getTime()}`,
+        field: `${local.field}_${new Date().getTime()}`,
       });
       // if ("clone" === e.pullMode) {
       //   this.$set(this.drapModel, newIndex, {
@@ -503,6 +520,22 @@ export default {
         // 布局容器不允许容器停靠
         if (e.draggedContext.element.type === "container") return false;
       }
+      // 容器之间不能同级拖入
+      // this.element = e.draggedContext.element;
+
+      // if (
+      //   e.draggedContext.element.type === "container" &&
+      //   e.relatedContext.element
+      // ) {
+      //   return false;
+      // }
+      // // 其他组件不能与容器同级拖入
+      // if (e.relatedContext.list) {
+      //   return (
+      //     !e.relatedContext.list.filter((item) => item.type === "container")
+      //       .length > 0
+      //   );
+      // }
     },
 
     // 选中控件
@@ -525,8 +558,11 @@ export default {
     // 预览表单
     viewForm() {
       if (this.drapModel.length) {
+        this.viewModel.rule = [];
         this.showView = true;
-        this.viewModel.rule = this.drapModel;
+        setTimeout(() => {
+          this.viewModel.rule = this.drapModel;
+        }, 60);
       } else {
         this.$Message.warning("对不起：没有可预览的表单！");
       }
@@ -535,11 +571,29 @@ export default {
     // 生成JSON
     createJson() {
       if (this.drapModel.length) {
-        // this.monacoEditor.dispose();
-        // this.monacoEditor.setValue(this.drapModel);
         this.showJson = true;
+        this.monacoEditor.setValue(
+          `{ "fromData": ${JSON.stringify(this.drapModel)} }`
+        );
+        // 自动换行
+        this.monacoEditor.updateOptions({
+          wordWrap: "on",
+          wordWrap: "bounded",
+          wordWrapColumn: 80,
+           wrappingStrategy: 'advanced', // 'simple';
+          wrappingIndent: "deepIndent",
+          scrollbar: {
+            horizontalHasArrows: false,
+            horizontal: "hidden",
+          },
+          mouseWheelZoom: true,
+        });
+        this.monacoEditor.getAction(['editor.action.formatDocument'])._run();
+        // 取消自动换行
+        // this.monacoEditor.updateOptions({ wordWrap: "off" });
       } else {
         this.$Message.warning("对不起：没有可生成的表单！");
+        this.monacoEditor.dispose();
       }
     },
 
@@ -674,7 +728,7 @@ export default {
             right: 4px;
           }
         }
-        .form-drap-item:active{
+        .form-drap-item:active {
           cursor: move;
         }
         .form-drap-active {

@@ -32,7 +32,7 @@ const dragFlue = [
         icon: "ios-phone-landscape",
         title: "输入框",
         className: "",
-        field: "",
+        field: "text",
         value: "",
         props: {
           // input的表单类型 <input type="">：注：有些表单类型form-create和element-ui专门做成了组件，可以在上面的type中直接用，所以下面有些类型如（radio）在这里会无效哦！！
@@ -70,7 +70,7 @@ const dragFlue = [
         icon: "md-list-box",
         title: "文本域",
         className: "",
-        field: "",
+        field: "textarea",
         value: "",
         props: {
           type: "textarea",
@@ -83,7 +83,7 @@ const dragFlue = [
         icon: "md-radio-button-on",
         title: "单选框",
         className: "",
-        field: "",
+        field: "radio",
         value: "",
         options: [
           { label: "选项1", value: 1 },
@@ -97,7 +97,7 @@ const dragFlue = [
         icon: "md-checkbox",
         title: "复选框",
         className: "",
-        field: "",
+        field: "checkbox",
         value: [1],
         options: [
           { label: "选项1", value: 1 },
@@ -111,7 +111,7 @@ const dragFlue = [
         icon: "ios-arrow-dropdown-circle",
         title: "下拉框",
         className: "",
-        field: "",
+        field: "select",
         value: "",
         props: {
           placeholder: "请选择！",
@@ -128,7 +128,7 @@ const dragFlue = [
         icon: "ios-color-palette",
         title: "颜色",
         className: "",
-        field: "",
+        field: "color",
         value: "",
         props: {
           type: "color",
@@ -141,8 +141,8 @@ const dragFlue = [
         icon: "ios-switch",
         title: "开关",
         className: "",
-        field: "",
-        value: false,
+        field: "switch",
+        value: 0,
       },
       {
         type: "slider",
@@ -150,7 +150,7 @@ const dragFlue = [
         icon: "ios-options",
         title: "滑块",
         className: "",
-        field: "",
+        field: "slider",
         value: 0,
       },
       {
@@ -159,7 +159,7 @@ const dragFlue = [
         icon: "ios-calendar",
         title: "日期",
         className: "",
-        field: "",
+        field: "datepicker",
         value: "",
         props: {
           placeholder: "请输选择日期！",
@@ -171,7 +171,7 @@ const dragFlue = [
         icon: "md-timer",
         title: "时间",
         className: "",
-        field: "",
+        field: "timepicker",
         value: "",
         props: {
           placeholder: "请输选择时间！",
@@ -191,7 +191,7 @@ const dragFlue = [
         icon: "logo-bitcoin",
         title: "标题",
         className: "",
-        field: "",
+        field: "title",
         value: "",
       },
       {
@@ -200,7 +200,7 @@ const dragFlue = [
         icon: "ios-grid",
         title: "表格",
         className: "",
-        field: "",
+        field: "table",
         value: "",
       },
       {
@@ -209,17 +209,22 @@ const dragFlue = [
         icon: "md-star-half",
         title: "评分",
         className: "",
-        field: "",
+        field: "rate",
         value: 0,
       },
       {
-        type: "vue-editor",
+        type:'editor',
         name: "",
         icon: "ios-create",
-        title: "富文本",
+        field:'editor',
+        title:'富文本',
         className: "",
-        field: "editor",
-        value: "",
+        value:'<b>@form-create/component-wangeditor</b>',
+        props:{
+            init(editor){
+                //todo 初始化
+            }
+        }
       },
     ]
   },
