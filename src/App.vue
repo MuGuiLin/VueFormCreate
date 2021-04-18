@@ -1,11 +1,5 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/vuefromcreate">vuefromcreate</router-link> |
-      <router-link to="/form-create">form-create</router-link> |
-      <router-link to="/vuedraggable">vuedraggable</router-link>
-    </div>
     <router-view/>
   </div>
 </template>

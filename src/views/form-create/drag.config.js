@@ -246,6 +246,19 @@ const dragFlue = [
         icon: "md-cube",
         title: "弹性布局",
         className: "",
+        gutter: 10,
+        drag: [
+            {
+                span: 8,
+                list: []
+            }, {
+                span: 8,
+                list: []
+            }, {
+                span: 8,
+                list: []
+            }
+        ]
       },
 
     ]

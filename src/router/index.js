@@ -1,39 +1,23 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+import FormCreate from '../views/form-create/form-create.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: Home
+    name: 'FormCreate',
+    component: FormCreate
   },
   {
-    path: '/vuefromcreate',
-    name: 'VueFromCreate',
+    path: '/form-views',
+    name: 'FormViews',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/vuefromcreate/vuefromcreate.vue')
+    component: () => import(/* webpackChunkName: "about" */ '../views/form-views/form-views.vue')
   },
-  {
-    path: '/form-create',
-    name: 'Form-Create',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/form-create/form-create.vue')
-  },
-  {
-    path: '/vuedraggable',
-    name: 'VueDraggable',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/vuedraggable/vuedraggable.vue')
-  }
 ]
 
 const router = new VueRouter({
