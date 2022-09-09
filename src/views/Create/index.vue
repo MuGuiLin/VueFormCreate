@@ -4,17 +4,10 @@
       <menu class="mu-form-ctrl">
         <div class="ctrl-group" v-for="(o, i) in dragModel" :key="i">
           <h4 class="ctrl-title">{{ o.name }}</h4>
-          <draggable
-            v-model="o.ctrl"
-            v-bind="{
-              sort: false,
-              group: { name: 'drag-drap', pull: 'clone', put: false },
-            }"
-            animation="300"
-            dragClass="drag-class"
-            ghostClass="ghost-class"
-            chosenClass="chosen-class"
-          >
+          <draggable v-model="o.ctrl" v-bind="{
+            sort: false,
+            group: { name: 'drag-drap', pull: 'clone', put: false },
+          }" animation="300" dragClass="drag-class" ghostClass="ghost-class" chosenClass="chosen-class">
             <transition-group tag="ul">
               <li class="ctrl-item" v-for="(o, i) in o.ctrl" :key="i + i">
                 <Icon class="icon" :type="o.icon" />
@@ -27,90 +20,30 @@
 
       <main class="mu-form-main">
         <div class="main-head">
-          <Button
-            shape="circle"
-            ghost
-            size="small"
-            type="success"
-            icon="md-eye"
-            @click="viewForm()"
-            >预览表单</Button
-          >
-          <Button
-            shape="circle"
-            ghost
-            size="small"
-            type="info"
-            icon="logo-nodejs"
-            @click="createJson()"
-            >生成JSON</Button
-          >
-          <Button
-            shape="circle"
-            ghost
-            size="small"
-            type="error"
-            icon="md-trash"
-            @click="clearForm()"
-            >清空表单</Button
-          >
+          <Button shape="circle" ghost size="small" type="success" icon="md-eye" @click="viewForm()">预览表单</Button>
+          <Button shape="circle" ghost size="small" type="info" icon="logo-nodejs" @click="createJson()">生成JSON</Button>
+          <Button shape="circle" ghost size="small" type="error" icon="md-trash" @click="clearForm()">清空表单</Button>
         </div>
         <div class="main-body">
           <section class="body-drap-box">
-            <Form
-              class="body-drap-form"
-              :class="{ 'void-form': !drapModel.length }"
-            >
-              <draggable
-                v-model="drapModel"
-                group="drag-drap"
-                animation="300"
-                dragClass="drag-class"
-                ghostClass="ghost-class"
-                chosenClass="chosen-class"
-                :move="drapMove"
-                @start="onStart"
-                @end="onEnd"
-                @add="drapAdd"
-              >
+            <Form class="body-drap-form" :class="{ 'void-form': !drapModel.length }">
+              <draggable v-model="drapModel" group="drag-drap" animation="300" dragClass="drag-class"
+                ghostClass="ghost-class" chosenClass="chosen-class" :move="drapMove" @start="onStart" @end="onEnd"
+                @add="drapAdd">
                 <transition-group class="transition-group" tag="section">
-                  <div
-                    class="form-drap-item"
-                    v-for="(o, i) in drapModel"
-                    :key="o.key + i"
-                    :class="{
-                      'form-drap-active':
-                        drapActive && drapActive.key === o.key,
-                    }"
-                    @mousedown.stop="activeCommand(i)"
-                  >
+                  <div class="form-drap-item" v-for="(o, i) in drapModel" :key="o.key + i" :class="{
+                    'form-drap-active':
+                      drapActive && drapActive.key === o.key,
+                  }" @mousedown.stop="activeCommand(i)">
                     <!-- {{ o.title }} -->
                     <!-- 输入框 -->
 
-                    <FormItem
-                      :label="o.title"
-                      v-if="'input' === o.type"
-                      :key="o.key"
-                    >
-                      <Input
-                        :type="o.props.type || 'text'"
-                        v-model="o.value"
-                        :placeholder="o.props.placeholder"
-                      />
+                    <FormItem :label="o.title" v-if="'input' === o.type" :key="o.key">
+                      <Input :type="o.props.type || 'text'" v-model="o.value" :placeholder="o.props.placeholder" />
                     </FormItem>
                     <div class="ivu-form-ctrl">
-                      <Button
-                        size="small"
-                        type="success"
-                        icon="md-copy"
-                        @click="copyCommand(i)"
-                      ></Button>
-                      <Button
-                        size="small"
-                        type="warning"
-                        icon="md-trash"
-                        @click="removeCommand(i)"
-                      ></Button>
+                      <Button size="small" type="success" icon="md-copy" @click="copyCommand(i)"></Button>
+                      <Button size="small" type="warning" icon="md-trash" @click="removeCommand(i)"></Button>
                     </div>
 
                     <!-- 文本域 -->
@@ -151,28 +84,13 @@
                     <div v-if="'radio' === o.type" :key="o.key">
                       <FormItem :label="o.title">
                         <RadioGroup v-model="o.value">
-                          <Radio
-                            v-for="o in o.options"
-                            :key="o.value"
-                            :label="o.value"
-                            :disabled="o.disabled || false"
-                            >{{ o.label }}</Radio
-                          >
+                          <Radio v-for="o in o.options" :key="o.value" :label="o.value" :disabled="o.disabled || false">
+                            {{ o.label }}</Radio>
                         </RadioGroup>
                       </FormItem>
                       <div class="ivu-form-ctrl">
-                        <Button
-                          size="small"
-                          type="success"
-                          icon="md-copy"
-                          @click="copyCommand(i)"
-                        ></Button>
-                        <Button
-                          size="small"
-                          type="warning"
-                          icon="md-trash"
-                          @click="removeCommand(i)"
-                        ></Button>
+                        <Button size="small" type="success" icon="md-copy" @click="copyCommand(i)"></Button>
+                        <Button size="small" type="warning" icon="md-trash" @click="removeCommand(i)"></Button>
                       </div>
                     </div>
 
@@ -180,28 +98,13 @@
                     <div v-if="'checkbox' === o.type" :key="o.key">
                       <FormItem :label="o.title">
                         <CheckboxGroup v-model="o.value">
-                          <Checkbox
-                            v-for="o in o.options"
-                            :key="o.value"
-                            :label="o.value"
-                            :disabled="o.disabled || false"
-                            >{{ o.label }}</Checkbox
-                          >
+                          <Checkbox v-for="o in o.options" :key="o.value" :label="o.value"
+                            :disabled="o.disabled || false">{{ o.label }}</Checkbox>
                         </CheckboxGroup>
                       </FormItem>
                       <div class="ivu-form-ctrl">
-                        <Button
-                          size="small"
-                          type="success"
-                          icon="md-copy"
-                          @click="copyCommand(i)"
-                        ></Button>
-                        <Button
-                          size="small"
-                          type="warning"
-                          icon="md-trash"
-                          @click="removeCommand(i)"
-                        ></Button>
+                        <Button size="small" type="success" icon="md-copy" @click="copyCommand(i)"></Button>
+                        <Button size="small" type="warning" icon="md-trash" @click="removeCommand(i)"></Button>
                       </div>
                     </div>
 
@@ -209,27 +112,12 @@
                     <div v-if="'select' === o.type" :key="o.key">
                       <FormItem :label="o.title">
                         <Select v-model="o.value">
-                          <Option
-                            v-for="o in o.options"
-                            :value="o.value"
-                            :key="o.value"
-                            >{{ o.label }}</Option
-                          >
+                          <Option v-for="o in o.options" :value="o.value" :key="o.value">{{ o.label }}</Option>
                         </Select>
                       </FormItem>
                       <div class="ivu-form-ctrl">
-                        <Button
-                          size="small"
-                          type="success"
-                          icon="md-copy"
-                          @click="copyCommand(i)"
-                        ></Button>
-                        <Button
-                          size="small"
-                          type="warning"
-                          icon="md-trash"
-                          @click="removeCommand(i)"
-                        ></Button>
+                        <Button size="small" type="success" icon="md-copy" @click="copyCommand(i)"></Button>
+                        <Button size="small" type="warning" icon="md-trash" @click="removeCommand(i)"></Button>
                       </div>
                     </div>
 
@@ -242,18 +130,8 @@
                         </Switch>
                       </FormItem>
                       <div class="ivu-form-ctrl">
-                        <Button
-                          size="small"
-                          type="success"
-                          icon="md-copy"
-                          @click="copyCommand(i)"
-                        ></Button>
-                        <Button
-                          size="small"
-                          type="warning"
-                          icon="md-trash"
-                          @click="removeCommand(i)"
-                        ></Button>
+                        <Button size="small" type="success" icon="md-copy" @click="copyCommand(i)"></Button>
+                        <Button size="small" type="warning" icon="md-trash" @click="removeCommand(i)"></Button>
                       </div>
                     </div>
 
@@ -263,68 +141,30 @@
                         <Slider v-model="o.value"></Slider>
                       </FormItem>
                       <div class="ivu-form-ctrl">
-                        <Button
-                          size="small"
-                          type="success"
-                          icon="md-copy"
-                          @click="copyCommand(i)"
-                        ></Button>
-                        <Button
-                          size="small"
-                          type="warning"
-                          icon="md-trash"
-                          @click="removeCommand(i)"
-                        ></Button>
+                        <Button size="small" type="success" icon="md-copy" @click="copyCommand(i)"></Button>
+                        <Button size="small" type="warning" icon="md-trash" @click="removeCommand(i)"></Button>
                       </div>
                     </div>
 
                     <!-- 日期 -->
                     <div v-if="'datepicker' === o.type" :key="o.key">
                       <FormItem :label="o.title">
-                        <DatePicker
-                          type="date"
-                          v-model="o.value"
-                          :placeholder="o.props.placeholder"
-                        ></DatePicker>
+                        <DatePicker type="date" v-model="o.value" :placeholder="o.props.placeholder"></DatePicker>
                       </FormItem>
                       <div class="ivu-form-ctrl">
-                        <Button
-                          size="small"
-                          type="success"
-                          icon="md-copy"
-                          @click="copyCommand(i)"
-                        ></Button>
-                        <Button
-                          size="small"
-                          type="warning"
-                          icon="md-trash"
-                          @click="removeCommand(i)"
-                        ></Button>
+                        <Button size="small" type="success" icon="md-copy" @click="copyCommand(i)"></Button>
+                        <Button size="small" type="warning" icon="md-trash" @click="removeCommand(i)"></Button>
                       </div>
                     </div>
 
                     <!-- 时间 -->
                     <div v-if="'timepicker' === o.type" :key="o.key">
                       <FormItem :label="o.title">
-                        <TimePicker
-                          type="time"
-                          v-model="o.value"
-                          :placeholder="o.props.placeholder"
-                        ></TimePicker>
+                        <TimePicker type="time" v-model="o.value" :placeholder="o.props.placeholder"></TimePicker>
                       </FormItem>
                       <div class="ivu-form-ctrl">
-                        <Button
-                          size="small"
-                          type="success"
-                          icon="md-copy"
-                          @click="copyCommand(i)"
-                        ></Button>
-                        <Button
-                          size="small"
-                          type="warning"
-                          icon="md-trash"
-                          @click="removeCommand(i)"
-                        ></Button>
+                        <Button size="small" type="success" icon="md-copy" @click="copyCommand(i)"></Button>
+                        <Button size="small" type="warning" icon="md-trash" @click="removeCommand(i)"></Button>
                       </div>
                     </div>
 
@@ -334,18 +174,8 @@
                         <Rate v-model="o.value" />
                       </FormItem>
                       <div class="ivu-form-ctrl">
-                        <Button
-                          size="small"
-                          type="success"
-                          icon="md-copy"
-                          @click="copyCommand(i)"
-                        ></Button>
-                        <Button
-                          size="small"
-                          type="warning"
-                          icon="md-trash"
-                          @click="removeCommand(i)"
-                        ></Button>
+                        <Button size="small" type="success" icon="md-copy" @click="copyCommand(i)"></Button>
+                        <Button size="small" type="warning" icon="md-trash" @click="removeCommand(i)"></Button>
                       </div>
                     </div>
 
@@ -355,22 +185,12 @@
                       </FormItem> -->
                       <Row :gutter="o.gutter">
                         <Col v-for="(o, i) in o.drag" :key="i" :span="o.span">
-                          <div group="drag-drap">col-6</div>
+                        <div group="drag-drap">col-6</div>
                         </Col>
                       </Row>
                       <div class="ivu-form-ctrl">
-                        <Button
-                          size="small"
-                          type="success"
-                          icon="md-copy"
-                          @click="copyCommand(i)"
-                        ></Button>
-                        <Button
-                          size="small"
-                          type="warning"
-                          icon="md-trash"
-                          @click="removeCommand(i)"
-                        ></Button>
+                        <Button size="small" type="success" icon="md-copy" @click="copyCommand(i)"></Button>
+                        <Button size="small" type="warning" icon="md-trash" @click="removeCommand(i)"></Button>
                       </div>
                     </div>
 
@@ -422,26 +242,15 @@
       </aside>
     </section>
 
-    <Modal
-      v-model="showView"
-      footer-hide
-      width="680"
-      :lock-scroll="true"
-      title="表单生成预览"
-    >
-      <form-create
-        v-model="viewModel.model"
-        :rule="viewModel.rule"
-        :option="viewModel.option"
-      ></form-create>
+    <footer class="mu-form-footer">
+      <a href="http://www.form-create.com/designer" target="_blank" rel="noopener noreferrer">类似组件：form-create-designer 可视化表单设计器</a>
+    </footer>
+
+    <Modal v-model="showView" footer-hide width="680" :lock-scroll="true" title="表单生成预览">
+      <form-create v-model="viewModel.model" :rule="viewModel.rule" :option="viewModel.option"></form-create>
     </Modal>
 
-    <Modal
-      v-model="showJson"
-      fullscreen
-      title="表单配置JSON数据"
-      okText="下载JSON"
-    >
+    <Modal v-model="showJson" fullscreen title="表单配置JSON数据" okText="下载JSON">
       <div class="monaco-editor" id="monacoEditor" ref="monacoEditor">
         <!-- {{ drapModel }} -->
       </div>
@@ -658,17 +467,21 @@ export default {
   border: 1px solid #ebeef5;
   text-align: left;
   min-height: 90vh;
+
   .mu-form-ctrl {
     width: 250px;
     min-width: 250px;
     border-right: 1px solid #dcdee2;
+
     .ctrl-group {
       padding: 5px;
       padding-left: 6px;
       user-select: none;
+
       .ctrl-title {
         padding: 15px 10px 5px;
       }
+
       .ctrl-item {
         display: inline-block;
         box-sizing: border-box;
@@ -680,13 +493,16 @@ export default {
         cursor: move;
         border: 1px dashed #666;
         color: #666;
+
         .icon {
           font-size: 18px;
         }
+
         .name {
           display: block;
         }
       }
+
       .ctrl-item:hover {
         border: 1px dashed white;
         background: #2d8cf0;
@@ -694,17 +510,21 @@ export default {
       }
     }
   }
+
   .mu-form-main {
     flex: auto;
     display: flex;
     flex-direction: column;
     min-width: 350px;
     user-select: none;
+
     .main-head {
       padding: 12px;
       height: 50px;
+
       button {
         margin-right: 12px;
+
         span {
           margin: 0;
         }
@@ -717,6 +537,7 @@ export default {
       width: 100%;
       height: 100%;
       background: #f5f5f5;
+
       .body-drap-box {
         position: absolute;
         top: 15px;
@@ -727,15 +548,18 @@ export default {
         background: white;
         outline: 2px dashed #95a3b7;
         overflow: auto;
+
         .body-drap-form {
           box-sizing: border-box;
           display: block;
           height: 100%;
-          > div,
+
+          >div,
           .transition-group {
             height: 90%;
           }
         }
+
         .void-form::before {
           content: "请从左侧拖入表单控件！";
           position: absolute;
@@ -746,6 +570,7 @@ export default {
           font-size: 24px;
           color: #dcdee2;
         }
+
         .form-drap-item {
           position: relative;
           display: block;
@@ -757,6 +582,7 @@ export default {
             border: 2px dashed transparent;
             outline: 1px dashed transparent;
           }
+
           .ivu-form-ctrl {
             display: none;
             position: absolute;
@@ -770,16 +596,20 @@ export default {
             width: 100%;
           }
         }
+
         .form-drap-item:active {
           cursor: move;
         }
+
         .form-drap-active {
           .ivu-form-item {
             border-color: #2d8cf0;
             outline-color: #2d8cf0;
           }
+
           .ivu-form-ctrl {
             display: block;
+
             button.ivu-btn {
               opacity: 0.5;
               margin: 4px;
@@ -787,6 +617,7 @@ export default {
               text-align: center;
               font-size: 16px;
             }
+
             button.ivu-btn:hover {
               opacity: 1;
             }
@@ -795,16 +626,19 @@ export default {
       }
     }
   }
+
   .mu-form-attr {
     width: 300px;
     min-width: 300px;
     background: white;
     border-left: 1px solid #dcdee2;
+
     .ivu-tabs {
       .ivu-tabs-bar {
         .ivu-tabs-nav {
           .ivu-tabs-tab {
             padding: 16px;
+
             .ivu-icon {
               font-size: 16px;
               margin-right: 0;
@@ -812,9 +646,11 @@ export default {
           }
         }
       }
+
       .ivu-tabs-content {
         .attr-setup {
           padding: 12px;
+
           .ivu-form-item {
             margin-bottom: 6px;
           }
@@ -822,6 +658,12 @@ export default {
       }
     }
   }
+}
+
+.mu-form-footer {
+  text-align: center;
+  line-height: 80px;
+  background-color: white !important;
 }
 
 .ghost-class,
@@ -832,6 +674,7 @@ export default {
   color: white;
   opacity: 1 !important;
   background-color: #2d8cf0 !important;
+
   .ivu-form-item-label {
     color: white;
   }

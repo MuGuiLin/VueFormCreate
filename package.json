@@ -1,5 +1,5 @@
 {
-  "name": "vuefromcreate",
+  "name": "vueFromCreate",
   "version": "0.1.0",
   "private": true,
   "open": true,
@@ -12,6 +12,9 @@
     "@form-create/component-wangeditor": "^2.5.2",
     "@form-create/iview4": "^2.5.2",
     "core-js": "^3.6.5",
+    "jimp": "^0.16.1",
+    "jsqr": "^1.3.1",
+    "qrcodejs2": "0.0.2",
     "monaco-editor": "^0.23.0",
     "view-design": "^4.5.0",
     "vue": "^2.6.11",
