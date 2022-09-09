@@ -1,5 +1,5 @@
 <template>
-  <div>FormViews</div>
+  <div>FormPreview</div>
 </template>
 
 <script>

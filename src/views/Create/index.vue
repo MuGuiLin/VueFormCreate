@@ -243,7 +243,9 @@
     </section>
 
     <footer class="mu-form-footer">
-      <a href="http://www.form-create.com/designer" target="_blank" rel="noopener noreferrer">类似组件：form-create-designer 可视化表单设计器</a>
+      <a href="http://www.form-create.com/designer" target="_blank" rel="noopener noreferrer">类似组件：form-create-designer 可视化表单设计器</a>、
+      <a href="https://dream2023.gitee.io/f-render" target="_blank" rel="noopener noreferrer">FRender 表单设计器</a>、
+      <a href="http://cdn.kcz66.com/k-form-design.html" target="_blank" rel="noopener noreferrer">k-form-design 表单设计器</a>
     </footer>
 
     <Modal v-model="showView" footer-hide width="680" :lock-scroll="true" title="表单生成预览">
