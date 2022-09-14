@@ -1,97 +1,187 @@
 <template>
-  <div>
-    <table>
-      <thead>
-        <tr>
-          <th>1</th>
-          <th>2</th>
-          <th>3</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>4</td>
-          <td>5</td>
-          <td>6</td>
-        </tr>
-      </tbody>
-      <tfoot>
-        <tr>
-          <td>7</td>
-          <td>8</td>
-          <td>9</td>
-        </tr>
-      </tfoot>
-    </table>
-    <el-table :data="tableData" style="width: 100%">
-      <!-- <el-table-column
-        prop="date"
-        label="日期"
-        width="180">
-      </el-table-column>
-      <el-table-column
-        prop="name"
-        label="姓名"
-        width="180">
-      </el-table-column>
-      <el-table-column
-        prop="address"
-        label="地址">
-      </el-table-column> -->
-    </el-table>
+  <div class="table-demo">
+    <div class="native" v-if="0">
+      <h1> Native - Table</h1>
+      <table>
+        <!-- <colgroup>
+          <col width="100">
+          <col width="200">
+          <col width="auto">
+        </colgroup> -->
+        <thead>
+          <tr>
+            <th v-for="(o, i) in columns" :key="i">
+              <div>{{o.title}}</div>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(o, i) in data" :key="i">
+            <td v-for="(o, i) in o" :key="i">{{o}}</td>
+          </tr>
+        </tbody>
+        <!-- <tfoot>
+          <tr>
+            <td>1</td>
+            <td>1</td>
+            <td>1</td>
+            <td>1</td>
+            <td>1</td>
+            <td>1</td>
+          </tr>
+        </tfoot> -->
+      </table>
+    </div>
+
+    <br>
+    <h1> IViewUI - Table</h1>
+    <Table stripe border :columns="columns" :data="data" height="200"></Table>
+
+    <br>
+    <h1></h1>
+    <mu-table :thead="columns" :tbody="data" height="200"></mu-table>
+
   </div>
 </template>
 
 <script>
-
-// import Table from '@/components/smt-table/table/index.js';
-// import TableColumn from '@/components/smt-table/table-column/index.js';
-
-// const install = function (Vue) {
-//   if (install.installed) return;
-//   Vue.component(Table.name, Table);
-//   Vue.component(TableColumn.name, TableColumn);
-// };
-
-// if (typeof window !== 'undefined' && window.Vue) {
-//   install(window.Vue);
-// };
-
+import MuTable from '@/components/mu-table'
 export default {
-  name: "Table",
+  name: "Tables",
+  components: {
+    MuTable,
+  },
   data() {
     return {
-      tableData: [{
-        date: '2016-05-02',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-04',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1517 弄'
-      }, {
-        date: '2016-05-01',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1519 弄'
-      }, {
-        date: '2016-05-03',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1516 弄'
-      }]
+      columns: [
+        {
+          type: "selection",
+          width: 60,
+          align: "center",
+          fixed: "left",
+        },
+        {
+          title: "Name",
+          key: "name",
+          width: 100,
+          fixed: "left",
+        },
+        {
+          title: "Age",
+          key: "age",
+          sortable: true,
+        },
+        {
+          title: "Address",
+          key: "address",
+        },
+        {
+          title: "Date",
+          key: "date",
+          sortable: true,
+        },
+        {
+          title: "Action",
+          key: "action",
+          fixed: "right",
+          width: 120,
+          render: (h, params) => {
+            return h('div', [
+              // h('Icon', {
+              //   props: {
+              //     type: 'person'
+              //   }
+              // }),
+              h('strong', params.row.age),
+              h('Button', {
+                props: {
+                  type: 'primary',
+                  size: 'small'
+                },
+                style: {
+                  marginRight: '5px'
+                },
+                on: {
+                  click: () => {
+                    console.log(params, h);
+                  }
+                }
+              }, '编辑'),
+            ]);
+          }
+        },
+      ],
+      data: [
+        {
+          name: "John Brown",
+          age: 18,
+          address: "New York No. 1 Lake Park",
+          date: "2016-10-03",
+        },
+        {
+          name: "Jim Green",
+          age: 24,
+          address: "London No. 1 Lake Park",
+          date: "2016-10-01",
+        },
+        {
+          name: "Joe Black",
+          age: 30,
+          address: "Sydney No. 1 Lake Park",
+          date: "2016-10-02",
+        },
+        {
+          name: "Jon Snow",
+          age: 26,
+          address: "Ottawa No. 2 Lake Park",
+          date: "2016-10-04",
+        },
+        {
+          name: "John Brown",
+          age: 18,
+          address: "New York No. 1 Lake Park",
+          date: "2016-10-03",
+        },
+        {
+          name: "Jim Green",
+          age: 24,
+          address: "London No. 1 Lake Park",
+          date: "2016-10-01",
+        },
+        {
+          name: "Joe Black",
+          age: 30,
+          address: "Sydney No. 1 Lake Park",
+          date: "2016-10-02",
+        },
+        {
+          name: "Jon Snow",
+          age: 26,
+          address: "Ottawa No. 2 Lake Park",
+          date: "2016-10-04",
+        },
+      ],
     }
   }
 };
 </script>
 
 <style lang="less">
-table {
-  margin: auto;
-  border: 2px solid gray;
+.table-demo {
+  margin: 50px;
+}
 
-  th,
-  td {
-    padding: 30px;
+.native {
+  table {
+    margin: auto;
+    width: 100%;
     border: 1px solid gray;
+
+    th,
+    td {
+      padding: 30px;
+      border: 1px solid gray;
+    }
   }
 }
 </style>
