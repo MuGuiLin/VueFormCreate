@@ -12,13 +12,30 @@ export default {
       return column.filters && ((!this.fixed && !column.fixed) || (this.fixed === 'left' && column.fixed === 'left') || (this.fixed === 'right' && column.fixed === 'right'));
     },
     setCellWidth(column, index) {
-      let width = '';
+      let width = 'auto';
       if (column.width) {
-        width = column.width;
-      } else if (this.columnsWidth[column._index]) {
-        width = this.columnsWidth[column._index].width
+        width = `${column.width}px`;
       }
+      // else if (this.columnsWidth[column._index]) {
+      //   width = this.columnsWidth[column._index].width
+      // }
       return width;
-    }
+    },
+    setTdStyle(thead, column, index) {
+      let style = {};
+      if (column.width) {
+        style.width = `${column.width}px`;
+        if (index && column.fixed) {
+          if ('left' === column.fixed) {
+            style.left = `${index > 1 ? thead[index - 1].width + (column.width / 2 + 10) : thead[index - 1].width}px`;
+            style.zIndex = thead.length - index;
+          } else {
+            style.zIndex = thead.length - index;
+          }
+        }
+
+      }
+      return style;
+    },
   }
 }

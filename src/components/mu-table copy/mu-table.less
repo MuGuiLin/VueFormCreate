@@ -3,35 +3,18 @@
 @border : 1px solid #EAE7EB;
 
 .mu-table {
-    // box-sizing      : border-box;
-    // position        : relative;
-    // width           : 100%;
-    // max-width       : 100%;
-    // font-size       : 14px;
-    // border          : @border;
-    // background-color: white;
-    // overflow        : hidden;
-
-    box-sizing           : border-box;
-    margin               : 0;
-    padding              : 0;
-    color                : #000000d9;
-    font-variant         : tabular-nums;
-    line-height          : 1.5715;
-    list-style           : none;
-    font-feature-settings: "tnum";
-    position             : relative;
-    font-size            : 14px;
-    background           : #fff;
-    border-radius        : 2px;
+    box-sizing      : border-box;
+    position        : relative;
+    width           : 100%;
+    max-width       : 100%;
+    font-size       : 14px;
+    border          : @border;
+    background-color: white;
+    overflow        : hidden;
 
 
     table {
-        width          : 100%;
-        text-align     : left;
-        border-radius  : 2px 2px 0 0;
-        border-collapse: separate;
-        border-spacing : 0;
+        width: 100%;
 
         tr {
 
@@ -81,23 +64,6 @@
                 background-color: white;
             }
 
-            th.fixed-left,
-            td.fixed-left {
-                position: -webkit-sticky !important;
-                position: sticky !important;
-                left    : 0;
-                z-index : 666;
-            }
-
-            th.fixed-left,
-            td.fixed-right {
-                position  : -webkit-sticky !important;
-                position  : sticky !important;
-                right     : 0;
-                z-index   : 666;
-                box-shadow: -2px 0 6px -2px rgb(0 0 0, 20%);
-            }
-
             &:nth-child(2n) {
                 td {
                     background-color: #F8F8F8;
@@ -116,24 +82,11 @@
 
     &-head {
         background-color: @bgColor;
-        overflow        : hidden !important;
-
-
-        table {
-            position: relative;
-            table-layout: fixed;
-        }
     }
 
     &-body {
-        overflow: overlay !important;
-
-
-        table {
-            min-width   : 100%;
-            table-layout: fixed;
-        }
-
+        position: relative;
+        overflow  : auto;
         // &::-webkit-scrollbar{
         //     position: absolute;
         //     left: 0;

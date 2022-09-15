@@ -4,21 +4,8 @@
       <col v-for="(o, i) in thead" :key="i" :width="setCellWidth(o, i)" />
     </colgroup>
     <tbody :class="`${prefix}-tbody`">
-      <tr style="height: 0px; font-size: 0px;">
-        <td style="padding: 0px; border: 0px; height: 0px;"><div style="height: 0px; overflow: hidden;">&nbsp;</div></td>
-        <td style="padding: 0px; border: 0px; height: 0px;"><div style="height: 0px; overflow: hidden;">&nbsp;</div></td>
-        <td style="padding: 0px; border: 0px; height: 0px;"><div style="height: 0px; overflow: hidden;">&nbsp;</div></td>
-        <td style="padding: 0px; border: 0px; height: 0px;"><div style="height: 0px; overflow: hidden;">&nbsp;</div></td>
-        <td style="padding: 0px; border: 0px; height: 0px;"><div style="height: 0px; overflow: hidden;">&nbsp;</div></td>
-        <td style="padding: 0px; border: 0px; height: 0px;"><div style="height: 0px; overflow: hidden;">&nbsp;</div></td>
-      </tr>
       <tr v-for="(row, i) in tbody" :key="i">
-        <td
-          v-for="(col, j) in thead"
-          :key="j"
-          :class="col.fixed ? `fixed-${col.fixed}` : ''"
-          :style="setTdStyle(thead, col, j)"
-        >
+        <td v-for="(col, j) in thead" :key="j">
           <mu-cell
             :row="row"
             :col="col"
@@ -36,7 +23,7 @@
 import MuCell from "./mu-cell.vue";
 import mixins from "./mixins";
 export default {
-  mixins: [mixins],
+  mixins:[mixins],
   name: "mu-tbody",
   components: {
     MuCell,

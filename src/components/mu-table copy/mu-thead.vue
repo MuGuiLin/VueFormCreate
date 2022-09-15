@@ -3,14 +3,9 @@
     <colgroup>
       <col v-for="(o, i) in thead" :key="i" :width="setCellWidth(o, i)" />
     </colgroup>
-    <thead :class="`${prefix}-thead`" >
+    <thead :class="`${prefix}-thead`">
       <tr>
-        <th
-          v-for="(o, i) in thead"
-          :key="i"
-          :class="o.fixed ? `fixed-${o.fixed}` : ''"
-          :style="setTdStyle(thead, o, i)"
-        >
+        <th v-for="(o, i) in thead" :key="i">
           <div>
             <template v-if="'index' === o.type">{{ o.title || "#" }}</template>
             <template v-else-if="'selection' === o.type">
