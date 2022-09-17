@@ -66,7 +66,7 @@ export default {
     return {
       prefix,
       left: 0,
-      tableWidth: 1300,
+      tableWidth: 1200,
       bodyHeight: 0,
       columnsWidth: {},
     };
@@ -103,13 +103,8 @@ export default {
     },
     bodyStyle() {
       let style = {};
-      // if (this.bodyHeight !== 0) style.height = `${this.bodyHeight}px`;
+      // if (this.tableWidth !== 0) style.width = `${this.tableWidth}px`;
       if (this.height !== 0) style.height = `${this.height}px`;
-      return style;
-    },
-    fixedBodyStyle() {
-      let style = {};
-      if (this.bodyHeight !== 0) style.height = `${this.bodyHeight - 1}px`;
       return style;
     },
   },
