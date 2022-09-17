@@ -3,16 +3,12 @@
     <header :class="`${prefix}-head`">
       <mu-thead
         :thead="thead"
-        :style="scrollStyle"
+        :style="headStyle"
         class="mu-thead"
         :prefix="prefix"
       ></mu-thead>
     </header>
-    <main
-      :class="`${prefix}-body`"
-      :style="bodyStyle"
-      @scroll="handleBodyScroll"
-    >
+    <main :class="`${prefix}-body`" :style="bodyStyle" @scroll="bodyScroll">
       <mu-tbody
         :thead="thead"
         :tbody="tbody"
@@ -84,12 +80,6 @@ export default {
       if (!!this.width) style.width = `${this.width}px`;
       return style;
     },
-    scrollStyle() {
-      let style = {};
-      if (this.tableWidth !== 0) style.width = `${this.tableWidth}px`;
-      style.left = `${this.left}px`;
-      return style;
-    },
     classs() {
       return [
         `${prefix}`,
@@ -103,6 +93,12 @@ export default {
       let style = {};
       if (this.tableWidth !== 0) style.width = `${this.tableWidth}px`;
       style.tableLayout = "fixed";
+      return style;
+    },
+    headStyle() {
+      let style = {};
+      if (this.tableWidth !== 0) style.width = `${this.tableWidth}px`;
+      style.left = `${this.left}px`;
       return style;
     },
     bodyStyle() {
@@ -120,18 +116,9 @@ export default {
   watch: {},
 
   methods: {
-    handleBodyScroll(event) {
-      // console.log(event);
-      // if (this.showHeader) this.$els.header.scrollLeft = event.target.scrollLeft;
-      // if (this.isLeftFixed) this.$els.fixedBody.scrollTop = event.target.scrollTop;
-      // if (this.isRightFixed) this.$els.fixedRightBody.scrollTop = event.target.scrollTop;
-      // this.hideColumnFilter();
-      this.left = -event.target.scrollLeft;
-    },
     toggleSelect(_index) {
-      let data = {};
-      let index = -1;
-
+      let data = {},
+        index = -1;
       for (let i in this.objData) {
         if (parseInt(i) === _index) {
           data = this.objData[i];
@@ -139,9 +126,7 @@ export default {
         }
       }
       const status = !data._isChecked;
-
       this.objData[_index]._isChecked = status;
-
       const selection = this.getSelection();
       if (status) {
         this.$emit(
@@ -162,6 +147,13 @@ export default {
         this.$emit("on-select-all", selection);
       }
       this.$emit("on-selection-change", selection);
+    },
+    bodyScroll(event) {
+      // console.log(event);
+      // if (this.showHeader) this.$els.header.scrollLeft = event.target.scrollLeft;
+      // if (this.isLeftFixed) this.$els.fixedBody.scrollTop = event.target.scrollTop;
+      // if (this.isRightFixed) this.$els.fixedRightBody.scrollTop = event.target.scrollTop;
+      this.left = -event.target.scrollLeft;
     },
   },
   destroyed() {},
