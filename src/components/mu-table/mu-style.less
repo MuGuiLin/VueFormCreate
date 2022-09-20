@@ -3,32 +3,22 @@
 @border : 1px solid #EAE7EB;
 
 .mu-table {
-    // box-sizing      : border-box;
-    // position        : relative;
-    // width           : 100%;
-    // max-width       : 100%;
-    // font-size       : 14px;
-    // border          : @border;
-    // background-color: white;
-    // overflow        : hidden;
-
     box-sizing           : border-box;
     margin               : 0;
     padding              : 0;
-    color                : #000000d9;
+    width                : 100%;
+    max-width            : 100%;
     font-variant         : tabular-nums;
-    line-height          : 1.5715;
-    list-style           : none;
     font-feature-settings: "tnum";
-    position             : relative;
     font-size            : 14px;
+    color                : #555;
+    border               : 1px solid #DCDEE2;
     border-radius        : 2px;
-
+    overflow             : hidden;
 
     table {
         width          : 100%;
         text-align     : left;
-        border-radius  : 2px 2px 0 0;
         border-collapse: separate;
         border-spacing : 0;
 
@@ -111,12 +101,9 @@
         }
     }
 
-
-
     &-head {
-        background-color: @bgColor;
-        overflow        : hidden !important;
-
+        overflow  : hidden !important;
+        box-shadow: 0px 2px 1px 0px rgba(0, 0, 0, 0.2);
 
         table {
             position    : relative;
@@ -145,7 +132,6 @@
     &-left {
         position  : absolute;
         top       : 0;
-        top       : 0;
         left      : 0;
         box-shadow: 2px 0 6px -2px rgba(0, 0, 0, 0.2);
     }
@@ -157,7 +143,5 @@
         right     : 0;
         box-shadow: -2px 0 6px -2px rgba(0, 0, 0, 0.2);
     }
-
-
 
 }

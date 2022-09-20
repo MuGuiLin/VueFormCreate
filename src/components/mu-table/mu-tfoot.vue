@@ -1,7 +1,3 @@
-<template>
-  <div><slot name="mu-tfoot"></slot></div>
-</template>
-
 <script>
 export default {
   name: "mu-tfoot",
@@ -9,5 +5,6 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<template>
+  <div><slot name="mu-tfoot"></slot></div>
+</template>

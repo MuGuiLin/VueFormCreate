@@ -40,13 +40,19 @@
       border
       :columns="columns"
       :data="data"
-      width="1000"
+      width="800"
       height="200"
     ></Table>
 
     <br />
     <h1>Mu - Table</h1>
-    <mu-table :thead="columns" :tbody="data" height="200"></mu-table>
+    <mu-table
+      :thead="columns"
+      :tbody="data"
+      height="200"
+      :change="change"
+      :select="select"
+    ></mu-table>
 
     <br />
     <h1>Hz - Table</h1>
@@ -159,19 +165,19 @@ export default {
           sortable: true,
         },
         {
-          type: "action",
           title: "Action",
           key: "action",
           fixed: "right",
           width: 120,
           render: (h, params) => {
+            console.log("render-->", h(), params);
             return h("div", [
               // h('Icon', {
               //   props: {
               //     type: 'person'
               //   }
               // }),
-              h("strong", params.row.age),
+              // h("strong", params.row.age),
               h(
                 "Button",
                 {
@@ -245,6 +251,14 @@ export default {
         },
       ],
     };
+  },
+  methods: {
+    change(val) {
+      console.log("单选：", val);
+    },
+    select(val) {
+      console.log("全选：", val);
+    },
   },
 };
 </script>

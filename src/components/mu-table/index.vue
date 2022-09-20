@@ -1,32 +1,7 @@
-<template>
-  <section :class="classs" :style="styles">
-    <header :class="`${prefix}-head`">
-      <mu-thead
-        :thead="thead"
-        :style="headStyle"
-        class="mu-thead"
-        :prefix="prefix"
-      ></mu-thead>
-    </header>
-    <main :class="`${prefix}-body`" :style="bodyStyle" @scroll="bodyScroll">
-      <mu-tbody
-        :thead="thead"
-        :tbody="tbody"
-        :style="tableStyle"
-        :prefix="prefix"
-      ></mu-tbody>
-    </main>
-    <footer :class="`${prefix}-foot`">
-      <MufFoot></MufFoot>
-    </footer>
-  </section>
-</template>
-
 <script>
 import MuThead from "./mu-thead.vue";
 import MuTbody from "./mu-tbody.vue";
 import MufFoot from "./mu-tfoot.vue";
-const prefix = "mu-table";
 export default {
   name: "mu-table",
   components: {
@@ -61,18 +36,24 @@ export default {
       type: Boolean,
       default: false,
     },
+    change: Function,
+    select: Function,
   },
   data() {
     return {
-      prefix,
+      prefix: "mu-table",
       left: 0,
+      data: this.setData(),
       tableWidth: 1200,
       bodyHeight: 0,
       columnsWidth: {},
     };
   },
   created() {},
-  mounted() {},
+  mounted() {
+    if (!this.content) this.content = this.$parent;
+    console.log(222, this.content.$compile);
+  },
   computed: {
     styles() {
       let style = {};
@@ -82,10 +63,10 @@ export default {
     },
     classs() {
       return [
-        `${prefix}`,
+        `${this.prefix}`,
         {
-          [`${prefix}-border`]: this.border,
-          [`${prefix}-stripe`]: this.stripe,
+          [`${this.prefix}-border`]: this.border,
+          [`${this.prefix}-stripe`]: this.stripe,
         },
       ];
     },
@@ -111,50 +92,121 @@ export default {
   watch: {},
 
   methods: {
-    toggleSelect(_index) {
-      let data = {},
-        index = -1;
-      for (let i in this.objData) {
-        if (parseInt(i) === _index) {
-          data = this.objData[i];
-          index = i;
+    typeOf(obj) {
+      const toString = Object.prototype.toString;
+      const map = {
+        "[object Boolean]": "boolean",
+        "[object Number]": "number",
+        "[object String]": "string",
+        "[object Function]": "function",
+        "[object Array]": "array",
+        "[object Date]": "date",
+        "[object RegExp]": "regExp",
+        "[object Undefined]": "undefined",
+        "[object Null]": "null",
+        "[object Object]": "object",
+      };
+      return map[toString.call(obj)];
+    },
+    deepCopy(data) {
+      const t = this.typeOf(data);
+      let o;
+      if (t === "array") {
+        o = [];
+      } else if (t === "object") {
+        o = {};
+      } else {
+        return data;
+      }
+      if (t === "array") {
+        for (let i = 0; i < data.length; i++) {
+          o.push(this.deepCopy(data[i]));
+        }
+      } else if (t === "object") {
+        for (let i in data) {
+          o[i] = this.deepCopy(data[i]);
         }
       }
-      const status = !data._isChecked;
-      this.objData[_index]._isChecked = status;
-      const selection = this.getSelection();
-      if (status) {
-        this.$emit(
-          "on-select",
-          selection,
-          JSON.parse(JSON.stringify(this.data[_index]))
-        );
+      return o;
+    },
+    getStyle(element, styleName) {
+      if (!element || !styleName) return null;
+      styleName = camelCase(styleName);
+      if (styleName === "float") {
+        styleName = "cssFloat";
       }
-      this.$emit("on-selection-change", selection);
+      try {
+        const computed = document.defaultView.getComputedStyle(element, "");
+        return element.style[styleName] || computed
+          ? computed[styleName]
+          : null;
+      } catch (e) {
+        return element.style[styleName];
+      }
+    },
+    toggleSelect(index) {
+      let data = {};
+      for (let i in this.data) {
+        if (parseInt(i) === index) data = this.data[i];
+      }
+      this.data[index]._isChecked = !data._isChecked;
+      this.change(this.data[index]);
     },
     selectAll(status) {
-      this.rebuildData.forEach((data) => {
-        this.objData[data._index]._isChecked = status;
-      });
-
-      const selection = this.getSelection();
-      if (status) {
-        this.$emit("on-select-all", selection);
+      const data = [];
+      for (const i in this.data) {
+        this.data[i]._isChecked = status;
+        data.push(this.data[i]);
       }
-      this.$emit("on-selection-change", selection);
+      this.select(this.tbody);
     },
     bodyScroll(event) {
-      // console.log(event);
       // if (this.showHeader) this.$els.header.scrollLeft = event.target.scrollLeft;
       // if (this.isLeftFixed) this.$els.fixedBody.scrollTop = event.target.scrollTop;
       // if (this.isRightFixed) this.$els.fixedRightBody.scrollTop = event.target.scrollTop;
       this.left = -event.target.scrollLeft;
+    },
+    setData() {
+      let data = {};
+      this.tbody.forEach((row, index) => {
+        const oRow = this.deepCopy(row);
+        oRow._isChecked = false;
+        data[index] = oRow;
+      });
+      return data;
     },
   },
   destroyed() {},
 };
 </script>
 
+<template>
+  <section :class="classs" :style="styles">
+    <header :class="`${prefix}-head`">
+      <mu-thead
+        :prefix="prefix"
+        :data="data"
+        :thead="thead"
+        :style="headStyle"
+        class="mu-thead"
+      ></mu-thead>
+    </header>
+    <main :class="`${prefix}-body`" :style="bodyStyle" @scroll="bodyScroll">
+      <mu-tbody
+        :prefix="prefix"
+        :data="data"
+        :thead="thead"
+        :tbody="tbody"
+        :style="tableStyle"
+      ></mu-tbody>
+    </main>
+    <footer :class="`${prefix}-foot`">
+      <MufFoot></MufFoot>
+    </footer>
+  </section>
+</template>
+
+<!-- <style lang="less" scoped> -->
 <style lang="less">
-@import url("./mu-table.less");
+@import url("./mu-style.less");
 </style>

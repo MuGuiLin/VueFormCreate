@@ -21,7 +21,7 @@ export default {
       // }
       return width;
     },
-    setTdStyle(thead, column, index) {
+    setCellStyle(thead, column, index) {
       let style = {};
       if (column.width) {
         style.width = `${column.width}px`;
@@ -33,7 +33,9 @@ export default {
             style.zIndex = thead.length - index;
           }
         }
-
+      }
+      if (column.fixed || 'index' === column.type || 'selection' === column.type) {
+        style.textAlign = `center`;
       }
       return style;
     },
