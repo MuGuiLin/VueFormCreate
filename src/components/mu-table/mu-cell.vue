@@ -1,4 +1,5 @@
 <script>
+import Vue from "vue";
 export default {
   name: "mu-cell",
   props: {
@@ -10,6 +11,7 @@ export default {
   data() {
     return {
       type: "",
+      content: this.$parent.$parent.content,
     };
   },
   mounted() {
@@ -21,23 +23,20 @@ export default {
     },
     compile() {
       if (this.col.render) {
-        const $parent = this.$parent.$parent;
-        console.log(this.col.render(this.row, this.col, this.index));
-        const template = this.col.render(this.row, this.col, this.index);
+        const $parent = this.content;
+        console.log(this.$parent.$parent);
+        // const template = this.col.render(this.row, this.col, this.index);
+        // const cell = document.createElement("div");
+        // cell.innerHTML = template;
+        // const _oldParentChildLen = $parent.$children.length;
+        // $parent.$compile(cell);
+        // const _newParentChildLen = $parent.$children.length;
 
-        const cell = document.createElement("div");
-        cell.innerHTML = template;
-        const _oldParentChildLen = $parent.$children.length;
-        $parent.$compile(cell);
-        const _newParentChildLen = $parent.$children.length;
-
-        if (_oldParentChildLen !== _newParentChildLen) {
-          // if render normal html node, do not tag
-          this.uid = $parent.$children[$parent.$children.length - 1]._uid; // tag it, and delete when data or columns update
-        }
-        this.$el.innerHTML = "";
-
-        this.$el.appendChild(cell);
+        // if (_oldParentChildLen !== _newParentChildLen) {
+        //   this.uid = $parent.$children[$parent.$children.length - 1]._uid; // tag it, and delete when data or columns update
+        // }
+        this.$el.innerHTML = "<button>编辑</button>";
+        // this.$el.appendChild(cell);
       }
     },
   },

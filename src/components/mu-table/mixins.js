@@ -25,17 +25,14 @@ export default {
       let style = {};
       if (column.width) {
         style.width = `${column.width}px`;
-        if (index && column.fixed) {
-          if ('left' === column.fixed) {
-            style.left = `${index > 1 ? thead[index - 1].width + (column.width / 2 + 10) : thead[index - 1].width}px`;
-            style.zIndex = thead.length - index;
-          } else {
-            style.zIndex = thead.length - index;
+        if (column.fixed) {
+          if (index) {
+            if ('left' === column.fixed) {
+              style.left = `${index > 1 ? thead[index - 1].width + (column.width / 2 + 10) : thead[index - 1].width}px`;
+              style.zIndex = thead.length - index;
+            }
           }
         }
-      }
-      if (column.fixed || 'index' === column.type || 'selection' === column.type) {
-        style.textAlign = `center`;
       }
       return style;
     },

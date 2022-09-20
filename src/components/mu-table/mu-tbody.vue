@@ -28,12 +28,6 @@ export default {
         return [];
       },
     },
-    style: {
-      type: Object,
-      default: function () {
-        return {};
-      },
-    },
     fixed: {
       type: [Boolean, String],
       default: false,
@@ -48,7 +42,7 @@ export default {
 </script>
 
 <template>
-  <table border="0" cellspacing="0" cellpadding="0" :style="style">
+  <table border="0" cellspacing="0" cellpadding="0">
     <colgroup>
       <col v-for="(o, i) in thead" :key="i" :width="setCellWidth(o, i)" />
     </colgroup>

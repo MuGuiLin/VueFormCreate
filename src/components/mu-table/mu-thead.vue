@@ -11,7 +11,6 @@ export default {
         return [];
       },
     },
-    style: Object,
     fixed: {
       type: [Boolean, String],
       default: false,
@@ -22,12 +21,18 @@ export default {
     change(e) {
       this.$parent.selectAll(e.target.checked);
     },
+    sorter(i, t) {
+      if (this.columns[index]._sortType === type) {
+        type = "normal";
+      }
+      this.$parent.handleSort(index, type);
+    },
   },
 };
 </script>
 
 <template>
-  <table border="0" cellspacing="0" cellpadding="0" :style="style">
+  <table border="0" cellspacing="0" cellpadding="0">
     <colgroup>
       <col v-for="(o, i) in thead" :key="i" :width="setCellWidth(o, i)" />
     </colgroup>
@@ -48,6 +53,14 @@ export default {
             </template>
             <template v-else>
               {{ o.title }}
+              <span :class="`${prefix}-sort`" v-if="o.sorter">
+                <i :class="{ on: o._sortType === 1 }" @click="sorter(i, 1)"
+                  >▲</i
+                >
+                <i :class="{ on: o._sortType === 0 }" @click="sorter(i, 0)"
+                  >▼</i
+                >
+              </span>
             </template>
           </div>
         </th>

@@ -34,7 +34,7 @@
     </div>
 
     <br />
-    <h1>IViewUI - Table</h1>
+    <!-- <h1>IViewUI - Table</h1> -->
     <Table
       stripe
       border
@@ -46,13 +46,16 @@
 
     <br />
     <h1>Mu - Table</h1>
-    <mu-table
+    <div style="width:800px">
+      <mu-table
       :thead="columns"
       :tbody="data"
-      height="200"
       :change="change"
       :select="select"
+      height="200"
     ></mu-table>
+    </div>
+
 
     <br />
     <h1>Hz - Table</h1>
@@ -145,41 +148,33 @@ export default {
           fixed: "left",
         },
         {
-          title: "Name",
+          title: "姓名",
           key: "name",
-          width: 100,
           fixed: "left",
         },
         {
-          title: "Age",
+          title: "年龄",
           key: "age",
-          sortable: true,
+          sorter: true,
         },
         {
-          title: "Address",
+          title: "地址",
           key: "address",
         },
         {
-          title: "Date",
+          title: "日期",
           key: "date",
+          fixed: "right",
           sortable: true,
         },
         {
-          title: "Action",
-          key: "action",
+          title: "操作",
           fixed: "right",
           width: 120,
           render: (h, params) => {
-            console.log("render-->", h(), params);
             return h("div", [
-              // h('Icon', {
-              //   props: {
-              //     type: 'person'
-              //   }
-              // }),
-              // h("strong", params.row.age),
               h(
-                "Button",
+                "button",
                 {
                   props: {
                     type: "primary",
@@ -200,6 +195,14 @@ export default {
           },
         },
       ],
+
+      // h('Icon', {
+      //   props: {
+      //     type: 'person'
+      //   }
+      // }),
+      // h("strong", params.row.age),
+
       data: [
         {
           name: "John Brown",
@@ -253,8 +256,8 @@ export default {
     };
   },
   methods: {
-    change(val) {
-      console.log("单选：", val);
+    change(val, index) {
+      console.log("单选：", val, index);
     },
     select(val) {
       console.log("全选：", val);
