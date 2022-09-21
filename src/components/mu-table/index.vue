@@ -2,11 +2,11 @@
 import MuThead from "./mu-thead.vue";
 import MuTbody from "./mu-tbody.vue";
 import MufFoot from "./mu-tfoot.vue";
+import { assist } from "./mu-public";
 
-const SPECIAL_CHARS_REGEXP = /([\:\-\_]+(.))/g;
-const MOZ_HACK_REGEXP = /^moz([A-Z])/;
 export default {
   name: "mu-table",
+  mixins: [assist],
   components: {
     MuThead,
     MuTbody,
@@ -77,7 +77,6 @@ export default {
         },
       ];
     },
-
     tableStyle() {
       const style = {};
       if (this.tableWidth !== 0) style.width = `${this.tableWidth}px`;
@@ -98,65 +97,6 @@ export default {
   },
   watch: {},
   methods: {
-    typeOf(obj) {
-      const toString = Object.prototype.toString;
-      const map = {
-        "[object Boolean]": "boolean",
-        "[object Number]": "number",
-        "[object String]": "string",
-        "[object Function]": "function",
-        "[object Array]": "array",
-        "[object Date]": "date",
-        "[object RegExp]": "regExp",
-        "[object Undefined]": "undefined",
-        "[object Null]": "null",
-        "[object Object]": "object",
-      };
-      return map[toString.call(obj)];
-    },
-    deepCopy(data) {
-      const t = this.typeOf(data);
-      let o;
-      if (t === "array") {
-        o = [];
-      } else if (t === "object") {
-        o = {};
-      } else {
-        return data;
-      }
-      if (t === "array") {
-        for (let i = 0; i < data.length; i++) {
-          o.push(this.deepCopy(data[i]));
-        }
-      } else if (t === "object") {
-        for (let i in data) {
-          o[i] = this.deepCopy(data[i]);
-        }
-      }
-      return o;
-    },
-    camelCase(name) {
-      return name
-        .replace(SPECIAL_CHARS_REGEXP, function (_, separator, letter, offset) {
-          return offset ? letter.toUpperCase() : letter;
-        })
-        .replace(MOZ_HACK_REGEXP, "Moz$1");
-    },
-    getStyle(element, styleName) {
-      if (!element || !styleName) return null;
-      styleName = this.camelCase(styleName);
-      if (styleName === "float") {
-        styleName = "cssFloat";
-      }
-      try {
-        const computed = document.defaultView.getComputedStyle(element, "");
-        return element.style[styleName] || computed
-          ? computed[styleName]
-          : null;
-      } catch (e) {
-        return element.style[styleName];
-      }
-    },
     toggleSelect(index) {
       let data = {};
       for (let i in this.data) {
@@ -173,6 +113,13 @@ export default {
       }
       this.select(status ? this.tbody : []);
     },
+    handleSort(index, type) {
+      let data = {};
+      for (let i in this.data) {
+        if (parseInt(i) === index) this.data[i]._sortType = 1;
+      }
+      this.data[index]._isChecked = type;
+    },
     bodyScroll(event) {
       // if (this.showHeader) this.$els.header.scrollLeft = event.target.scrollLeft;
       // if (this.isLeftFixed) this.$els.fixedBody.scrollTop = event.target.scrollTop;
@@ -184,6 +131,7 @@ export default {
       this.tbody.forEach((row, index) => {
         const oRow = this.deepCopy(row);
         oRow._isChecked = false;
+        oRow._sortType = 1;
         data[index] = oRow;
       });
       return data;

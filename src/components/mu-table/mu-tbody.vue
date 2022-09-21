@@ -1,9 +1,10 @@
 <script>
+import { column } from "./mu-public";
 import MuCell from "./mu-cell.vue";
-import mixins from "./mixins";
+
 export default {
-  mixins: [mixins],
   name: "mu-tbody",
+  mixins: [column],
   components: {
     MuCell,
   },

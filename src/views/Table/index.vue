@@ -46,73 +46,57 @@
 
     <br />
     <h1>Mu - Table</h1>
-    <div style="width:800px">
+    <div >
       <mu-table
-      :thead="columns"
-      :tbody="data"
-      :change="change"
-      :select="select"
-      height="200"
-    ></mu-table>
+        :thead="columns"
+        :tbody="data"
+        :change="change"
+        :select="select"
+        width="800"
+        height="200"
+      ></mu-table>
     </div>
-
 
     <br />
     <h1>Hz - Table</h1>
     <hz-table :data="data" height="200">
       <hz-table-item slot="head">
-        <hz-table-column width="40" text-align="center" fixed
+        <hz-table-column width="60" text-align="center" fixed
           >#</hz-table-column
         >
-        <hz-table-column width="80" fixed border-right="1"
-          >标准1</hz-table-column
+        <hz-table-column width="120" fixed border-right="1"
+          >姓名</hz-table-column
         >
-        <hz-table-column width="100">标准2</hz-table-column>
-        <hz-table-column width="80">标准3</hz-table-column>
-
-        <hz-table-column width="100" border-right="1">标准4</hz-table-column>
-        <hz-table-column width="165" border-right="1">标准5</hz-table-column>
-        <hz-table-column border-right="1">标准6</hz-table-column>
-        <hz-table-column border-right="1" width="196">标准7</hz-table-column>
-        <hz-table-column width="180">标准8</hz-table-column>
-        <hz-table-column border-right="1">标准9</hz-table-column>
+        <hz-table-column width="100">年龄</hz-table-column>
+        <hz-table-column width="280">地址</hz-table-column>
+        <hz-table-column border-right="1">日期</hz-table-column>
+        <hz-table-column width="120">操作</hz-table-column>
       </hz-table-item>
 
       <hz-table-item slot="body" v-for="(item, index) in data" :key="index">
         <hz-table-column
           class="serialNumber"
-          width="40"
+          width="60"
           text-align="center"
           fixed
           >{{ index + 1 }}</hz-table-column
         >
-        <hz-table-column width="80" fixed border-right="1">{{
+        <hz-table-column width="120" fixed border-right="1">{{
           item.name
         }}</hz-table-column>
         <hz-table-column width="100" fixed>{{ item.age }}</hz-table-column>
-        <hz-table-column width="80" class="overflowHiddenEllipsis">
-          {{ item.date }}
-        </hz-table-column>
 
-        <hz-table-column width="100" border-right="1">{{
+        <hz-table-column width="280" border-right="1">{{
           item.address
         }}</hz-table-column>
-        <hz-table-column width="165" border-right="1">
-          {{ item.date }}
-        </hz-table-column>
+
         <hz-table-column border-right="1">
           {{ item.date }}
         </hz-table-column>
-        <hz-table-column border-right="1" width="196">
-          {{ item.date }}
-        </hz-table-column>
-        <hz-table-column width="180">
-          <button @click="detailEvent(item)">详情</button>
-          <button @click="editEvent(item)">修改</button>
+        <hz-table-column width="120">
+          <button @click="detailEvent(item)">详情</button>&nbsp;
+          <button @click="editEvent(item)">修改</button>&nbsp;
           <button @click="deleteEvent(item)">删除</button>
-        </hz-table-column>
-        <hz-table-column border-right="1">
-          {{ item.date }}
         </hz-table-column>
       </hz-table-item>
     </hz-table>
@@ -184,12 +168,30 @@ export default {
                     marginRight: "5px",
                   },
                   on: {
-                    click: () => {
-                      console.log(params, h);
+                    click: (e) => {
+                      console.log(params, h, e);
                     },
                   },
                 },
                 "编辑"
+              ),
+              h(
+                "button",
+                {
+                  props: {
+                    type: "primary",
+                    size: "small",
+                  },
+                  style: {
+                    marginRight: "5px",
+                  },
+                  on: {
+                    click: (e) => {
+                      console.log(params, h, e);
+                    },
+                  },
+                },
+                "详情"
               ),
             ]);
           },
@@ -206,7 +208,7 @@ export default {
       data: [
         {
           name: "John Brown",
-          age: 18,
+          age: 15,
           address: "New York No. 1 Lake Park",
           date: "2016-10-03",
         },

@@ -1,11 +1,17 @@
 <script>
-import Mixins from "./mixins";
+import { column } from "./mu-public";
 export default {
-  mixins: [Mixins],
   name: "mu-thead",
+  mixins: [column],
   props: {
     prefix: String,
     thead: {
+      type: Array,
+      default: function () {
+        return [];
+      },
+    },
+    data: {
       type: Array,
       default: function () {
         return [];
@@ -22,10 +28,20 @@ export default {
       this.$parent.selectAll(e.target.checked);
     },
     sorter(i, t) {
-      if (this.columns[index]._sortType === type) {
-        type = "normal";
+      if (this.data[i]._sortType === t) {
+        t = "";
       }
-      this.$parent.handleSort(index, type);
+      this.$parent.handleSort(i, t);
+    },
+    sort(i) {
+      console.log(11111111111, this.data[i]);
+      let on = "";
+      if (1 === this.data[i]._sortType) {
+        on = "on-1";
+      } else if (2 === this.data[i]._sortType) {
+        on = "on-2";
+      }
+      return on;
     },
   },
 };
@@ -54,12 +70,8 @@ export default {
             <template v-else>
               {{ o.title }}
               <span :class="`${prefix}-sort`" v-if="o.sorter">
-                <i :class="{ on: o._sortType === 1 }" @click="sorter(i, 1)"
-                  >▲</i
-                >
-                <i :class="{ on: o._sortType === 0 }" @click="sorter(i, 0)"
-                  >▼</i
-                >
+                <i :class="sort(i)" @click="sorter(i, 1)"></i>
+                <i :class="sort(i)" @click="sorter(i, 2)"></i>
               </span>
             </template>
           </div>

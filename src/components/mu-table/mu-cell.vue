@@ -1,7 +1,8 @@
 <script>
-import Vue from "vue";
+import MuRender from "./mu-render";
 export default {
   name: "mu-cell",
+  components: { MuRender },
   props: {
     row: Object,
     col: Object,
@@ -15,7 +16,7 @@ export default {
     };
   },
   mounted() {
-    this.compile();
+    // this.compile();
   },
   methods: {
     change() {
@@ -35,7 +36,7 @@ export default {
         // if (_oldParentChildLen !== _newParentChildLen) {
         //   this.uid = $parent.$children[$parent.$children.length - 1]._uid; // tag it, and delete when data or columns update
         // }
-        this.$el.innerHTML = "<button>编辑</button>";
+        // this.$el.innerHTML = "<button>编辑</button>";
         // this.$el.appendChild(cell);
       }
     },
@@ -51,6 +52,13 @@ export default {
     <template v-else-if="'selection' === col.type">
       <input type="checkbox" :checked="checked" @change="change" />
     </template>
+    <mu-render
+      v-else-if="col.render"
+      :row="row"
+      :column="col"
+      :index="index"
+      :render="col.render"
+    ></mu-render>
     <template v-else>
       {{ row[col.key] }}
     </template>
