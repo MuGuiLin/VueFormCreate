@@ -39,28 +39,17 @@ export default {
       type: Boolean,
       default: false,
     },
-    change: Function,
-    select: Function,
-    content: {
-      type: Object,
-    },
   },
   data() {
     return {
       prefix: "mu-table",
       left: 0,
-      data: this.setData(),
+      head: this.setHead(),
+      body: this.setBody(),
+      checkeAll: false,
       tableWidth: 0,
       columnsWidth: {},
     };
-  },
-  computed() {
-    if (!this.content) this.content = this.$parent;
-  },
-  mounted() {
-    // this.winResize();
-    // window.addEventListener("resize", this.winResize, false);
-    if (!this.content) this.content = this.$parent;
   },
   computed: {
     styles() {
@@ -77,11 +66,6 @@ export default {
         },
       ];
     },
-    tableStyle() {
-      const style = {};
-      if (this.tableWidth !== 0) style.width = `${this.tableWidth}px`;
-      return style;
-    },
     headStyle() {
       const style = {};
       if (this.tableWidth !== 0) style.width = `${this.tableWidth}px`;
@@ -90,97 +74,130 @@ export default {
     },
     bodyStyle() {
       const style = {};
-      if (this.tableWidth !== 0) style.width = `${this.tableWidth}px`;
       if (this.height !== 0) style.height = `${this.height}px`;
+      return style;
+    },
+    tableStyle() {
+      const style = {};
+      if (this.tableWidth !== 0) style.width = `${this.tableWidth}px`;
       return style;
     },
   },
   watch: {},
   methods: {
-    toggleSelect(index) {
-      let data = {};
-      for (let i in this.data) {
-        if (parseInt(i) === index) data = this.data[i];
-      }
-      this.data[index]._isChecked = !data._isChecked;
-      this.change(data, index);
-    },
-    selectAll(status) {
-      const data = [];
-      for (const i in this.data) {
-        this.data[i]._isChecked = status;
-        data.push(this.data[i]);
-      }
-      this.select(status ? this.tbody : []);
-    },
-    handleSort(index, type) {
-      let data = {};
-      for (let i in this.data) {
-        if (parseInt(i) === index) this.data[i]._sortType = 1;
-      }
-      this.data[index]._isChecked = type;
-    },
-    bodyScroll(event) {
-      // if (this.showHeader) this.$els.header.scrollLeft = event.target.scrollLeft;
-      // if (this.isLeftFixed) this.$els.fixedBody.scrollTop = event.target.scrollTop;
-      // if (this.isRightFixed) this.$els.fixedRightBody.scrollTop = event.target.scrollTop;
-      this.left = -event.target.scrollLeft;
-    },
-    setData() {
-      let data = {};
-      this.tbody.forEach((row, index) => {
+    setHead() {
+      let data = [];
+      this.thead.forEach((row, index) => {
         const oRow = this.deepCopy(row);
-        oRow._isChecked = false;
-        oRow._sortType = 1;
+        oRow.sorter && (oRow._sortType = 0);
+        oRow._index = index;
         data[index] = oRow;
       });
       return data;
     },
+    setBody() {
+      let data = [];
+      this.tbody.forEach((row, index) => {
+        const oRow = this.deepCopy(row);
+        oRow._isChecked = false;
+        data[index] = oRow;
+      });
+      return data;
+    },
+    isSelectAll() {
+      this.checkeAll = this.body?.length
+        ? this.body.every(function (o) {
+            return o._isChecked;
+          })
+        : false;
+    },
+    toggleSelect(index) {
+      let data = {};
+      for (let i in this.body) {
+        if (parseInt(i) === index) data = this.body[i];
+      }
+      this.body[index]._isChecked = !data._isChecked;
+      this.isSelectAll();
+      this.$emit("change", data, index);
+    },
+
+    selectAll(status) {
+      this.body.forEach((o, i) => {
+        o._isChecked = status;
+      });
+      this.$emit("select", status ? this.body : []);
+    },
+    sortData(data, type, index) {
+      const head = this.head[index];
+      const key = head.key;
+      data.sort((a, b) => {
+        if ("function" === this.typeOf(head?.sorter)) {
+          return head.sorter(a[key], b[key], type);
+        } else {
+          if (1 === type) {
+            return a[key] > b[key] ? 1 : -1;
+          } else if (2 === type) {
+            return a[key] < b[key] ? 1 : -1;
+          }
+        }
+      });
+      return data;
+    },
+    handleSort(index, type) {
+      for (let i in this.head) {
+        this.head[i].sorter && (this.head[i]._sortType = 0);
+      }
+      if (type) {
+        this.body = this.sortData(this.deepCopy(this.body), type, index);
+      }
+      this.head[index]._sortType = type;
+    },
+    bodyScroll(event) {
+      if (this.thead[0].fixed || this.thead[this.thead.length - 1].fixed) {
+        this.left = -event.target.scrollLeft;
+      }
+    },
     winResize() {
       this.$nextTick(() => {
         const allWidth = !this.thead.some((cell) => !cell.width);
-
         if (allWidth) {
           this.tableWidth = this.thead
             .map((cell) => cell.width)
             .reduce((a, b) => a + b);
         } else {
-          this.tableWidth = parseInt(this.getStyle(this.$el, "width")) - 1;
+          this.tableWidth = parseInt(this.getStyle(this.$el, "width")) - 2;
         }
-        console.log(111, this.tableWidth);
-
         this.columnsWidth = {};
-        // this.$nextTick(() => {
-        //   let columnsWidth = {};
-        //   let autoWidthIndex = -1;
-        //   if (allWidth)
-        //     autoWidthIndex = this.cloneColumns.findIndex((cell) => !cell.width); //todo 这行可能有问题
+        setTimeout(() => {
+          let columnsWidth = {};
+          let autoWidthIndex = -1;
+          if (allWidth)
+            autoWidthIndex = this.thead.findIndex((cell) => !cell.width);
 
-        //   if (this.data.length) {
-        //     const $td = this.$refs.tbody.$el
-        //       .querySelectorAll("tbody tr")[0]
-        //       .querySelectorAll("td");
-        //     for (let i = 0; i < $td.length; i++) {
-        //       // can not use forEach in Firefox
-        //       const column = this.cloneColumns[i];
-
-        //       let width = parseInt(this.getStyle($td[i], "width"));
-        //       if (i === autoWidthIndex) {
-        //         width = parseInt(this.getStyle($td[i], "width")) - 1;
-        //       }
-        //       if (column.width) width = column.width;
-
-        //       this.cloneColumns[i]._width = width;
-
-        //       columnsWidth[column._index] = {
-        //         width: width,
-        //       };
-        //     }
-        //     this.columnsWidth = columnsWidth;
-        //   }
-        // });
+          if (this.body.length) {
+            const $td = this.$refs.tbody.$el
+              .querySelectorAll("tbody tr")[0]
+              .querySelectorAll("td");
+            for (let i = 0; i < $td.length; i++) {
+              const column = this.head[i];
+              let width = parseInt(this.getStyle($td[i], "width"));
+              if (i === autoWidthIndex) {
+                width = parseInt(this.getStyle($td[i], "width")) - 1;
+              }
+              if (column.width) width = column.width;
+              this.head[i]._width = width;
+              columnsWidth[column._index] = { width };
+            }
+            this.columnsWidth = columnsWidth;
+            console.log(2, this.columnsWidth);
+          }
+        });
       });
     },
+  },
+  mounted() {
+    this.winResize();
+    window.addEventListener("resize", this.winResize, false);
   },
   beforeDestroy() {
     window.removeEventListener("resize", this.winResize, false);
@@ -193,19 +210,19 @@ export default {
     <header :class="`${prefix}-head`">
       <mu-thead
         :prefix="prefix"
-        :data="data"
-        :thead="thead"
+        :thead="head"
+        :tbody="body"
         :style="headStyle"
+        :checked="checkeAll"
         class="mu-thead"
       ></mu-thead>
     </header>
     <main :class="`${prefix}-body`" :style="bodyStyle" @scroll="bodyScroll">
       <mu-tbody
-        :ref="tbody"
+        ref="tbody"
         :prefix="prefix"
-        :data="data"
-        :thead="thead"
-        :tbody="tbody"
+        :thead="head"
+        :tbody="body"
         :style="tableStyle"
       ></mu-tbody>
     </main>

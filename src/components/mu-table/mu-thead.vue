@@ -11,12 +11,13 @@ export default {
         return [];
       },
     },
-    data: {
+    tbody: {
       type: Array,
       default: function () {
         return [];
       },
     },
+    checked: Boolean,
     fixed: {
       type: [Boolean, String],
       default: false,
@@ -28,20 +29,10 @@ export default {
       this.$parent.selectAll(e.target.checked);
     },
     sorter(i, t) {
-      if (this.data[i]._sortType === t) {
-        t = "";
+      if (t === this.tbody[i]._sortType) {
+        t = 0;
       }
       this.$parent.handleSort(i, t);
-    },
-    sort(i) {
-      console.log(11111111111, this.data[i]);
-      let on = "";
-      if (1 === this.data[i]._sortType) {
-        on = "on-1";
-      } else if (2 === this.data[i]._sortType) {
-        on = "on-2";
-      }
-      return on;
     },
   },
 };
@@ -70,8 +61,14 @@ export default {
             <template v-else>
               {{ o.title }}
               <span :class="`${prefix}-sort`" v-if="o.sorter">
-                <i :class="sort(i)" @click="sorter(i, 1)"></i>
-                <i :class="sort(i)" @click="sorter(i, 2)"></i>
+                <i
+                  :class="`${1 === o._sortType && 'on'}`"
+                  @click="sorter(i, 1)"
+                ></i>
+                <i
+                  :class="`${2 === o._sortType && 'on'}`"
+                  @click="sorter(i, 2)"
+                ></i>
               </span>
             </template>
           </div>

@@ -1,13 +1,16 @@
 <script>
 import MuRender from "./mu-render";
 export default {
-  name: "mu-cell",
+  name: "mu-cells",
   components: { MuRender },
   props: {
     row: Object,
     col: Object,
     index: Number,
-    checked: Boolean,
+    checked: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -25,19 +28,17 @@ export default {
     compile() {
       if (this.col.render) {
         const $parent = this.content;
-        console.log(this.$parent.$parent);
-        // const template = this.col.render(this.row, this.col, this.index);
-        // const cell = document.createElement("div");
-        // cell.innerHTML = template;
-        // const _oldParentChildLen = $parent.$children.length;
-        // $parent.$compile(cell);
-        // const _newParentChildLen = $parent.$children.length;
-
-        // if (_oldParentChildLen !== _newParentChildLen) {
-        //   this.uid = $parent.$children[$parent.$children.length - 1]._uid; // tag it, and delete when data or columns update
-        // }
-        // this.$el.innerHTML = "<button>编辑</button>";
-        // this.$el.appendChild(cell);
+        const template = this.col.render(this.row, this.col, this.index);
+        const cell = document.createElement("div");
+        cell.innerHTML = template;
+        const _oldParentChildLen = $parent.$children.length;
+        $parent.$compile(cell);
+        const _newParentChildLen = $parent.$children.length;
+        if (_oldParentChildLen !== _newParentChildLen) {
+          this.uid = $parent.$children[$parent.$children.length - 1]._uid;
+        }
+        this.$el.innerHTML = "";
+        this.$el.appendChild(cell);
       }
     },
   },

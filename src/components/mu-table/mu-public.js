@@ -1,3 +1,5 @@
+import { setTimeout } from "core-js";
+
 const CHARS_REGEXP = /([\:\-\_]+(.))/g;
 const HACKS_REGEXP = /^moz([A-Z])/;
 
@@ -21,15 +23,28 @@ export const column = {
       return column.filters && ((!this.fixed && !column.fixed) || (this.fixed === 'left' && column.fixed === 'left') || (this.fixed === 'right' && column.fixed === 'right'));
     },
     setCellWidth(column, index) {
+      setTimeout(() => {
+      console.log(111, this.columnsWidth);
       let width = '';
       if (column.width) {
         width = column.width;
       }
-      // else if (this.columnsWidth[column._index]) {
-      //   width = this.columnsWidth[column._index].width;
+
+      else if (this.columnsWidth[column._index]) {
+        width = this.columnsWidth[column._index].width;
+      }
+      // when browser has scrollBar,set a width to resolve scroll position bug
+      // if (this.columns.length === index + 1 && top && this.$parent.bodyHeight !== 0) {
+      //   width += this.$parent.scrollBarWidth;
+      // }
+      // when fixed type,reset first right fixed column's width
+      // if (this.fixed === 'right') {
+      //   const firstFixedIndex = this.columns.findIndex((col) => col.fixed === 'right');
+      //   if (firstFixedIndex === index) width += this.$parent.scrollBarWidth;
       // }
       if (width === '0') width = '';
       return width;
+    }, 300)
     },
     setCellStyle(thead, column, index) {
       let style = {};

@@ -40,19 +40,19 @@
       border
       :columns="columns"
       :data="data"
-      width="800"
+
       height="200"
     ></Table>
 
     <br />
     <h1>Mu - Table</h1>
-    <div >
+    <div>
       <mu-table
         :thead="columns"
         :tbody="data"
-        :change="change"
-        :select="select"
-        width="800"
+        @change="change"
+        @select="select"
+
         height="200"
       ></mu-table>
     </div>
@@ -133,6 +133,7 @@ export default {
         },
         {
           title: "姓名",
+          width: 100,
           key: "name",
           fixed: "left",
         },
@@ -140,6 +141,8 @@ export default {
           title: "年龄",
           key: "age",
           sorter: true,
+          sortable: true,
+
         },
         {
           title: "地址",
@@ -149,6 +152,7 @@ export default {
           title: "日期",
           key: "date",
           fixed: "right",
+          sorter: true,
           sortable: true,
         },
         {
@@ -156,44 +160,53 @@ export default {
           fixed: "right",
           width: 120,
           render: (h, params) => {
-            return h("div", [
-              h(
-                "button",
-                {
-                  props: {
-                    type: "primary",
-                    size: "small",
-                  },
-                  style: {
-                    marginRight: "5px",
-                  },
-                  on: {
-                    click: (e) => {
-                      console.log(params, h, e);
+            return h(
+              "div",
+              {
+                style: {
+                  fontSize: "10px",
+                },
+              },
+              [
+                h(
+                  "button",
+                  {
+                    props: {
+                      type: "primary",
+                      size: "small",
+                    },
+                    style: {
+                      marginRight: "5px",
+                      color: "blue",
+                    },
+                    on: {
+                      click: (e) => {
+                        console.log(params, h, e);
+                      },
                     },
                   },
-                },
-                "编辑"
-              ),
-              h(
-                "button",
-                {
-                  props: {
-                    type: "primary",
-                    size: "small",
-                  },
-                  style: {
-                    marginRight: "5px",
-                  },
-                  on: {
-                    click: (e) => {
-                      console.log(params, h, e);
+                  "编辑"
+                ),
+                h(
+                  "button",
+                  {
+                    props: {
+                      type: "success",
+                      size: "small",
+                    },
+                    style: {
+                      color: "green",
+                    },
+                    on: {
+                      click: (e) => {
+                        console.log(params, h, e);
+                      },
                     },
                   },
-                },
-                "详情"
-              ),
-            ]);
+                  "详情"
+                ),
+              ]
+            );
           },
         },
       ],

@@ -70,11 +70,10 @@
                 border-bottom   : none;
                 background-color: @bgColor;
 
-
                 .mu-table-sort {
                     position: relative;
-                    top     : 3px;
-                    left    : 10px;
+                    top     : 2px;
+                    left    : 8px;
 
                     i {
                         position     : absolute;
@@ -83,12 +82,13 @@
                         display      : block;
                         width        : 0px;
                         height       : 0px;
-                        border-bottom: 5px solid #888;
+                        border-bottom: 5px solid #999;
                         border-left  : 5px solid transparent;
                         border-right : 5px solid transparent;
                         cursor       : pointer;
 
-                        &:hover {
+                        &:hover,
+                        &.on {
                             border-bottom-color: @color;
                         }
 
@@ -97,7 +97,8 @@
                             border-top   : 5px solid #888;
                             border-bottom: 0;
 
-                            &:hover {
+                            &:hover,
+                            &.on {
                                 border-top-color: @color;
                             }
                         }
@@ -121,8 +122,6 @@
                     box-shadow: 2px 0 6px -2px rgba(0, 0, 0, 0.2);
                 }
             }
-
-
 
             th.fixed-right,
             td.fixed-right {

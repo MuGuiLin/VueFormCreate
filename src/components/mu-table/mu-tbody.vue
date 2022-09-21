@@ -1,12 +1,12 @@
 <script>
 import { column } from "./mu-public";
-import MuCell from "./mu-cell.vue";
+import MuCells from "./mu-cells.vue";
 
 export default {
   name: "mu-tbody",
   mixins: [column],
   components: {
-    MuCell,
+    MuCells,
   },
   props: {
     prefix: String,
@@ -23,21 +23,11 @@ export default {
         return [];
       },
     },
-    data: {
-      type: Array,
-      default: function () {
-        return [];
-      },
-    },
     fixed: {
       type: [Boolean, String],
       default: false,
     },
-  },
-  methods: {
-    checked(i) {
-      return this.data[i] && this.data[i]._isChecked;
-    },
+    columnsWidth: Object,
   },
 };
 </script>
@@ -55,13 +45,13 @@ export default {
           :class="col.fixed ? `fixed-${col.fixed}` : ''"
           :style="setCellStyle(thead, col, j)"
         >
-          <mu-cell
+          <mu-cells
             :row="row"
             :col="col"
             :key="j"
             :index="i"
-            :checked="checked(i)"
-          ></mu-cell>
+            :checked="row._isChecked"
+          ></mu-cells>
         </td>
       </tr>
     </tbody>
