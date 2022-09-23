@@ -51,7 +51,7 @@ export default {
       {{ index + 1 }}
     </template>
     <template v-else-if="'selection' === col.type">
-      <input type="checkbox" :checked="checked" @change="change" />
+      <input type="checkbox" class="checkbox" :checked="checked" @change="change" />
     </template>
     <mu-render
       v-else-if="col.render"

@@ -56,7 +56,7 @@ export default {
               o.title || "序号"
             }}</template>
             <template v-else-if="'selection' === o.type">
-              <input type="checkbox" :checked="checked" @change="change" />
+              <input type="checkbox" class="checkbox" :checked="checked" @change="change" />
             </template>
             <template v-else>
               {{ o.title }}

@@ -1,7 +1,7 @@
 <script>
 import MuThead from "./mu-thead.vue";
 import MuTbody from "./mu-tbody.vue";
-import MufFoot from "./mu-tfoot.vue";
+import MuTpage from "./mu-tpage.vue";
 import { assist } from "./mu-public";
 
 export default {
@@ -10,7 +10,7 @@ export default {
   components: {
     MuThead,
     MuTbody,
-    MufFoot,
+    MuTpage,
   },
   props: {
     thead: {
@@ -39,6 +39,18 @@ export default {
       type: Boolean,
       default: false,
     },
+    loading: {
+      type: Boolean,
+      default: false,
+    },
+    total: {
+      type: [Number, String],
+      default: 0
+    },
+    page: {
+      type: [Number, String],
+      default: 1
+    },
   },
   data() {
     return {
@@ -51,39 +63,6 @@ export default {
       columnsWidth: {},
     };
   },
-  computed: {
-    styles() {
-      const style = {};
-      if (!!this.width) style.width = `${this.width}px`;
-      return style;
-    },
-    classs() {
-      return [
-        `${this.prefix}`,
-        {
-          [`${this.prefix}-border`]: this.border,
-          [`${this.prefix}-stripe`]: this.stripe,
-        },
-      ];
-    },
-    headStyle() {
-      const style = {};
-      if (this.tableWidth !== 0) style.width = `${this.tableWidth}px`;
-      style.left = `${this.left}px`;
-      return style;
-    },
-    bodyStyle() {
-      const style = {};
-      if (this.height !== 0) style.height = `${this.height}px`;
-      return style;
-    },
-    tableStyle() {
-      const style = {};
-      if (this.tableWidth !== 0) style.width = `${this.tableWidth}px`;
-      return style;
-    },
-  },
-  watch: {},
   methods: {
     setHead() {
       let data = [];
@@ -95,9 +74,9 @@ export default {
       });
       return data;
     },
-    setBody() {
+    setBody(ndata) {
       let data = [];
-      this.tbody.forEach((row, index) => {
+      (this.tbody || ndata).forEach((row, index) => {
         const oRow = this.deepCopy(row);
         oRow._isChecked = false;
         data[index] = oRow;
@@ -107,8 +86,8 @@ export default {
     isSelectAll() {
       this.checkeAll = this.body?.length
         ? this.body.every(function (o) {
-            return o._isChecked;
-          })
+          return o._isChecked;
+        })
         : false;
     },
     toggleSelect(index) {
@@ -168,16 +147,14 @@ export default {
           this.tableWidth = parseInt(this.getStyle(this.$el, "width")) - 2;
         }
         this.columnsWidth = {};
-        setTimeout(() => {
+        this.$nextTick(() => {
           let columnsWidth = {};
           let autoWidthIndex = -1;
           if (allWidth)
             autoWidthIndex = this.thead.findIndex((cell) => !cell.width);
 
           if (this.body.length) {
-            const $td = this.$refs.tbody.$el
-              .querySelectorAll("tbody tr")[0]
-              .querySelectorAll("td");
+            const $td = this.$refs.tbody.$el.querySelector("tbody tr")[0].querySelectorAll("td");
             for (let i = 0; i < $td.length; i++) {
               const column = this.head[i];
               let width = parseInt(this.getStyle($td[i], "width"));
@@ -194,10 +171,50 @@ export default {
         });
       });
     },
+    pagination(page) {
+      this.$emit("changePage", page);
+    }
   },
   mounted() {
     this.winResize();
-    window.addEventListener("resize", this.winResize, false);
+    // window.addEventListener("resize", this.winResize, false);
+  },
+  computed: {
+    styles() {
+      const style = {};
+      if (!!this.width) style.width = `${this.width}px`;
+      return style;
+    },
+    classs() {
+      return [
+        `${this.prefix}`,
+        {
+          [`${this.prefix}-border`]: this.border,
+          [`${this.prefix}-stripe`]: this.stripe,
+        },
+      ];
+    },
+    headStyle() {
+      const style = {};
+      if (this.tableWidth !== 0) style.width = `${this.tableWidth}px`;
+      style.left = `${this.left}px`;
+      return style;
+    },
+    bodyStyle() {
+      const style = {};
+      if (this.height !== 0) style.height = `${this.height}px`;
+      return style;
+    },
+    tableStyle() {
+      const style = {};
+      if (this.tableWidth !== 0) style.width = `${this.tableWidth}px`;
+      return style;
+    },
+  },
+  watch: {
+    tbody(data) {
+      this.body = this.setBody(data);
+    },
   },
   beforeDestroy() {
     window.removeEventListener("resize", this.winResize, false);
@@ -206,30 +223,23 @@ export default {
 </script>
 
 <template>
-  <section :class="classs" :style="styles">
-    <header :class="`${prefix}-head`">
-      <mu-thead
-        :prefix="prefix"
-        :thead="head"
-        :tbody="body"
-        :style="headStyle"
-        :checked="checkeAll"
-        class="mu-thead"
-      ></mu-thead>
-    </header>
-    <main :class="`${prefix}-body`" :style="bodyStyle" @scroll="bodyScroll">
-      <mu-tbody
-        ref="tbody"
-        :prefix="prefix"
-        :thead="head"
-        :tbody="body"
-        :style="tableStyle"
-      ></mu-tbody>
-    </main>
-    <footer :class="`${prefix}-foot`">
-      <MufFoot></MufFoot>
-    </footer>
-  </section>
+  <article class="mu-table-wrapper">
+    <section :class="classs" :style="styles">
+      <header :class="`${prefix}-head`">
+        <mu-thead :prefix="prefix" :thead="head" :tbody="body" :style="headStyle" :checked="checkeAll" class="mu-thead">
+        </mu-thead>
+      </header>
+      <main :class="`${prefix}-body`" :style="bodyStyle" @scroll="bodyScroll">
+        <mu-tbody ref="tbody" :prefix="prefix" :thead="head" :tbody="body" :style="tableStyle"></mu-tbody>
+      </main>
+      <aside v-if="loading" :class="`${prefix}-load`">
+        <div class="tload">加载中</div>
+      </aside>
+    </section>
+    <section v-if="total && body.length" class="mu-tpage">
+      <mu-tpage prefix="mu-tpage" align="right" :total="total" :page="page" :change="pagination"></mu-tpage>
+    </section>
+  </article>
 </template>
 
 <!-- <style lang="less" scoped> -->

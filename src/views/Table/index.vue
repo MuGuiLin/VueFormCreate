@@ -35,38 +35,21 @@
 
     <br />
     <!-- <h1>IViewUI - Table</h1> -->
-    <Table
-      stripe
-      border
-      :columns="columns"
-      :data="data"
-
-      height="200"
-    ></Table>
+    <Table stripe border :columns="columns" :data="data" height="200"></Table>
 
     <br />
     <h1>Mu - Table</h1>
     <div>
-      <mu-table
-        :thead="columns"
-        :tbody="data"
-        @change="change"
-        @select="select"
-
-        height="200"
-      ></mu-table>
+      <mu-table :thead="columns" :tbody="data" :loading="loading" @change="change" @select="select" total="10"
+        @changePage="changePage" height="200"></mu-table>
     </div>
 
     <br />
     <h1>Hz - Table</h1>
     <hz-table :data="data" height="200">
       <hz-table-item slot="head">
-        <hz-table-column width="60" text-align="center" fixed
-          >#</hz-table-column
-        >
-        <hz-table-column width="120" fixed border-right="1"
-          >姓名</hz-table-column
-        >
+        <hz-table-column width="60" text-align="center" fixed>#</hz-table-column>
+        <hz-table-column width="120" fixed border-right="1">姓名</hz-table-column>
         <hz-table-column width="100">年龄</hz-table-column>
         <hz-table-column width="280">地址</hz-table-column>
         <hz-table-column border-right="1">日期</hz-table-column>
@@ -74,20 +57,14 @@
       </hz-table-item>
 
       <hz-table-item slot="body" v-for="(item, index) in data" :key="index">
-        <hz-table-column
-          class="serialNumber"
-          width="60"
-          text-align="center"
-          fixed
-          >{{ index + 1 }}</hz-table-column
-        >
+        <hz-table-column class="serialNumber" width="60" text-align="center" fixed>{{ index + 1 }}</hz-table-column>
         <hz-table-column width="120" fixed border-right="1">{{
-          item.name
+        item.name
         }}</hz-table-column>
         <hz-table-column width="100" fixed>{{ item.age }}</hz-table-column>
 
         <hz-table-column width="280" border-right="1">{{
-          item.address
+        item.address
         }}</hz-table-column>
 
         <hz-table-column border-right="1">
@@ -218,57 +195,62 @@ export default {
       // }),
       // h("strong", params.row.age),
 
-      data: [
-        {
-          name: "John Brown",
-          age: 15,
-          address: "New York No. 1 Lake Park",
-          date: "2016-10-03",
-        },
-        {
-          name: "Jim Green",
-          age: 24,
-          address: "London No. 1 Lake Park",
-          date: "2016-10-01",
-        },
-        {
-          name: "Joe Black",
-          age: 30,
-          address: "Sydney No. 1 Lake Park",
-          date: "2016-10-02",
-        },
-        {
-          name: "Jon Snow",
-          age: 26,
-          address: "Ottawa No. 2 Lake Park",
-          date: "2016-10-04",
-        },
-        {
-          name: "John Brown",
-          age: 18,
-          address: "New York No. 1 Lake Park",
-          date: "2016-10-03",
-        },
-        {
-          name: "Jim Green",
-          age: 24,
-          address: "London No. 1 Lake Park",
-          date: "2016-10-01",
-        },
-        {
-          name: "Joe Black",
-          age: 30,
-          address: "Sydney No. 1 Lake Park",
-          date: "2016-10-02",
-        },
-        {
-          name: "Jon Snow",
-          age: 26,
-          address: "Ottawa No. 2 Lake Park",
-          date: "2016-10-04",
-        },
-      ],
+      data: [],
+      loading: true,
     };
+  },
+  created() {
+    setTimeout(() => {
+      this.data = [{
+        name: "John Brown",
+        age: 15,
+        address: "New York No. 1 Lake Park",
+        date: "2016-10-03",
+      },
+      {
+        name: "Jim Green",
+        age: 24,
+        address: "London No. 1 Lake Park",
+        date: "2016-10-01",
+      },
+      {
+        name: "Joe Black",
+        age: 30,
+        address: "Sydney No. 1 Lake Park",
+        date: "2016-10-02",
+      },
+      {
+        name: "Jon Snow",
+        age: 26,
+        address: "Ottawa No. 2 Lake Park",
+        date: "2016-10-04",
+      },
+      {
+        name: "John Brown",
+        age: 18,
+        address: "New York No. 1 Lake Park",
+        date: "2016-10-03",
+      },
+      {
+        name: "Jim Green",
+        age: 24,
+        address: "London No. 1 Lake Park",
+        date: "2016-10-01",
+      },
+      {
+        name: "Joe Black",
+        age: 30,
+        address: "Sydney No. 1 Lake Park",
+        date: "2016-10-02",
+      },
+      {
+        name: "Jon Snow",
+        age: 26,
+        address: "Ottawa No. 2 Lake Park",
+        date: "2016-10-04",
+      }];
+      this.loading = false;
+    }, 3000);
   },
   methods: {
     change(val, index) {
@@ -277,6 +259,9 @@ export default {
     select(val) {
       console.log("全选：", val);
     },
+    changePage(page) {
+      console.log("分页：", page);
+    }
   },
 };
 </script>
