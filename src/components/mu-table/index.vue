@@ -45,11 +45,11 @@ export default {
     },
     total: {
       type: [Number, String],
-      default: 0
+      default: 0,
     },
     page: {
       type: [Number, String],
-      default: 1
+      default: 1,
     },
   },
   data() {
@@ -79,6 +79,8 @@ export default {
       (this.tbody || ndata).forEach((row, index) => {
         const oRow = this.deepCopy(row);
         oRow._isChecked = false;
+        oRow._isHover = false;
+        oRow._sortType = 0;
         data[index] = oRow;
       });
       return data;
@@ -86,8 +88,8 @@ export default {
     isSelectAll() {
       this.checkeAll = this.body?.length
         ? this.body.every(function (o) {
-          return o._isChecked;
-        })
+            return o._isChecked;
+          })
         : false;
     },
     toggleSelect(index) {
@@ -101,7 +103,7 @@ export default {
     },
 
     selectAll(status) {
-      this.body.forEach((o, i) => {
+      this.body.forEach((o) => {
         o._isChecked = status;
       });
       this.$emit("select", status ? this.body : []);
@@ -123,6 +125,7 @@ export default {
       return data;
     },
     handleSort(index, type) {
+      console.log(this.head);
       for (let i in this.head) {
         this.head[i].sorter && (this.head[i]._sortType = 0);
       }
@@ -130,6 +133,14 @@ export default {
         this.body = this.sortData(this.deepCopy(this.body), type, index);
       }
       this.head[index]._sortType = type;
+    },
+
+    handleMouseIn(index) {
+      if (this.body[index]._isHover) return;
+      this.body[index]._isHover = true;
+    },
+    handleMouseOut(index) {
+      this.body[index]._isHover = false;
     },
     bodyScroll(event) {
       if (this.thead[0].fixed || this.thead[this.thead.length - 1].fixed) {
@@ -144,36 +155,40 @@ export default {
             .map((cell) => cell.width)
             .reduce((a, b) => a + b);
         } else {
-          this.tableWidth = parseInt(this.getStyle(this.$el, "width")) - 2;
+          this.tableWidth =
+            (window.innerWidth ||
+              document.documentElement.clientWidth ||
+              document.body.clientWidth) ||
+            parseInt(this.getStyle(this.$el, "width")) - 1;
         }
         this.columnsWidth = {};
         this.$nextTick(() => {
           let columnsWidth = {};
           let autoWidthIndex = -1;
           if (allWidth)
-            autoWidthIndex = this.thead.findIndex((cell) => !cell.width);
-
+            autoWidthIndex = this.cloneColumns.findIndex((cell) => !cell.width);
           if (this.body.length) {
-            const $td = this.$refs.tbody.$el.querySelector("tbody tr")[0].querySelectorAll("td");
+            const $td = this.$refs.tbody.$el.querySelectorAll("tbody tr")[0].querySelectorAll("td");
             for (let i = 0; i < $td.length; i++) {
-              const column = this.head[i];
+              const column = this.cloneColumns[i];
               let width = parseInt(this.getStyle($td[i], "width"));
               if (i === autoWidthIndex) {
                 width = parseInt(this.getStyle($td[i], "width")) - 1;
               }
               if (column.width) width = column.width;
-              this.head[i]._width = width;
-              columnsWidth[column._index] = { width };
+              this.cloneColumns[i]._width = width;
+              columnsWidth[column._index] = {
+                width: width,
+              };
             }
             this.columnsWidth = columnsWidth;
-            console.log(2, this.columnsWidth);
           }
         });
       });
     },
     pagination(page) {
       this.$emit("changePage", page);
-    }
+    },
   },
   mounted() {
     this.winResize();
@@ -182,7 +197,7 @@ export default {
   computed: {
     styles() {
       const style = {};
-      if (!!this.width) style.width = `${this.width}px`;
+      if (this.width) style.width = `${this.width}px`;
       return style;
     },
     classs() {
@@ -226,18 +241,37 @@ export default {
   <article class="mu-table-wrapper">
     <section :class="classs" :style="styles">
       <header :class="`${prefix}-head`">
-        <mu-thead :prefix="prefix" :thead="head" :tbody="body" :style="headStyle" :checked="checkeAll" class="mu-thead">
+        <mu-thead
+          :prefix="prefix"
+          :thead="head"
+          :tbody="body"
+          :style="headStyle"
+          :checked="checkeAll"
+          class="mu-thead"
+        >
         </mu-thead>
       </header>
       <main :class="`${prefix}-body`" :style="bodyStyle" @scroll="bodyScroll">
-        <mu-tbody ref="tbody" :prefix="prefix" :thead="head" :tbody="body" :style="tableStyle"></mu-tbody>
+        <mu-tbody
+          ref="tbody"
+          :prefix="prefix"
+          :thead="head"
+          :tbody="body"
+          :style="tableStyle"
+        ></mu-tbody>
       </main>
       <aside v-if="loading" :class="`${prefix}-load`">
         <div class="tload">加载中</div>
       </aside>
     </section>
     <section v-if="total && body.length" class="mu-tpage">
-      <mu-tpage prefix="mu-tpage" align="right" :total="total" :page="page" :change="pagination"></mu-tpage>
+      <mu-tpage
+        prefix="mu-tpage"
+        align="right"
+        :total="total"
+        :page="page"
+        :change="pagination"
+      ></mu-tpage>
     </section>
   </article>
 </template>

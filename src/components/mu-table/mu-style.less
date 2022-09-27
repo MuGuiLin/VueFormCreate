@@ -1,7 +1,7 @@
 .mu-table-wrapper {
     @color-blue        : #0798FF;
     @color-gray        : #666;
-    @border-solid-gray : 1px solid #EAE7EB;
+    @border-solid-gray : 1px solid #E8E8E8;
     @border-solid-boxs : 1px solid #DCDEE2;
 
     .mu-table {
@@ -30,14 +30,16 @@
 
                 th,
                 td {
-                    min-width     : 0;
-                    height        : 44px;
-                    box-sizing    : border-box;
-                    text-align    : left;
-                    text-overflow : ellipsis;
-                    vertical-align: middle;
-                    border-bottom : @border-solid-gray;
-                    border-right  : @border-solid-gray;
+                    min-width         : 0;
+                    height            : 44px;
+                    box-sizing        : border-box;
+                    text-align        : left;
+                    text-overflow     : ellipsis;
+                    vertical-align    : middle;
+                    border-bottom     : @border-solid-gray;
+                    border-right      : @border-solid-gray;
+                    -webkit-transition: background-color .2s ease-in-out;
+                    transition        : background-color .2s ease-in-out;
 
                     div {
                         padding-left : 10px;
@@ -70,9 +72,9 @@
 
                 th {
                     height          : 40px;
-                    border-bottom   : none;
-                    background-color: #F5F6FA;
+                    color           : #333;
                     white-space     : nowrap;
+                    background-color: #F6F6F6;
                     overflow        : hidden;
 
                     .mu-table-sort {
@@ -138,17 +140,23 @@
                     }
                 }
 
-                &:nth-child(2n) {
+                &:nth-child(odd) {
                     td {
-                        background-color: #F8F8F8;
+                        background-color: white;
                     }
                 }
 
-                &:last-child {
+                &:nth-child(even) {
                     td {
-                        border-bottom: none;
+                        background-color: #F6F6F6;
                     }
                 }
+
+                // &:last-child {
+                //     td {
+                //         border-bottom: none;
+                //     }
+                // }
 
                 th:last-child,
                 td:last-child {
@@ -158,22 +166,78 @@
         }
 
         &-head {
-            overflow     : hidden !important;
-            border-bottom: @border-solid-gray;
-            box-shadow   : 0px 2px 1px 0px rgba(0, 0, 0, 0.2);
+            overflow: hidden !important;
 
             table {
                 position    : relative;
+                min-width   : 100%;
                 table-layout: fixed;
             }
         }
 
         &-body {
-            overflow: overlay !important;
+            min-height: 200px;
+            overflow  : overlay !important;
 
             table {
+                position    : relative;
                 min-width   : 100%;
                 table-layout: fixed;
+
+                td {
+                    button {
+                        margin       : 3px;
+                        padding      : 3px 12px;
+                        min-height   : 25px;
+                        font-size    : 13px;
+                        color        : #0099FF;
+                        background   : rgba(8, 152, 255, 0.2);
+                        border       : 1px solid #EEE;
+                        border-radius: 3px;
+                        box-shadow   : -2px 0px 6px 0px rgba(0, 0, 0, 0.08);
+                        cursor       : pointer;
+                    }
+
+                    button.success {
+                        color     : #01BB90;
+                        background: rgba(1, 188, 160, 0.2);
+                    }
+
+                    button.error {
+                        color     : #ED4014;
+                        background: rgba(258, 66, 20, 0.2);
+                    }
+
+                    button.warning {
+                        color     : #F90;
+                        background: rgba(255, 168, 0, 0.2);
+                    }
+
+                    button.large {
+                        padding  : 5px 16px;
+                        font-size: 14px;
+                    }
+
+                    button.small {
+                        padding  : 0px 6px;
+                        font-size: 12px;
+                    }
+                }
+
+                tr.tr-hover {
+                    td {
+                        background-color: rgba(228, 256, 255, 0.8);
+                    }
+                }
+
+                tr.no-data {
+                    height: 180px;
+
+                    td {
+                        text-align: center;
+                    }
+
+                }
             }
         }
 
@@ -216,23 +280,20 @@
                         opacity  : 0;
                     }
                 }
-
             }
-
         }
-
     }
 
     .mu-tpage {
         &-box {
-            padding: 5px 0;
-            float  : right;
-            display: flex;
+            padding    : 5px 0;
+            float      : right;
+            display    : flex;
+            line-height: 28px;
 
             >li {
                 margin             : 5px;
-                padding            : 0 4px;
-                min-width          : 29px;
+                min-width          : 28px;
                 height             : 28px;
                 line-height        : 28px;
                 font-size          : 14px;
@@ -262,8 +323,8 @@
 
                 >input {
                     margin       : auto 5px;
-                    padding      : 4px;
-                    width        : 60px;
+                    padding      : 0 4px;
+                    width        : 50px;
                     height       : 28px;
                     text-align   : center;
                     border-radius: 3px;
@@ -295,8 +356,6 @@
                     transform          : matrix(-0.71, 0.71, 0.71, 0.71, 0, 0);
                 }
             }
-
-            .mu-tpage-item {}
 
             .mu-tpage-next {
                 position: relative;

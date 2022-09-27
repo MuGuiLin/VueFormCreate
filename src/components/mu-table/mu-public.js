@@ -1,33 +1,37 @@
-import { setTimeout } from "core-js";
-
-const CHARS_REGEXP = /([\:\-\_]+(.))/g;
-const HACKS_REGEXP = /^moz([A-Z])/;
-
 export const column = {
   methods: {
     alignCls(column, row = {}) {
-      let cellClassName = '';
+      let cellClassName = "";
       if (row.cellClassName && column.key && row.cellClassName[column.key]) {
         cellClassName = row.cellClassName[column.key];
       }
       return [
         {
-          [`${cellClassName}`]: cellClassName,    // cell className
-          [`${column.className}`]: column.className,    // column className
+          [`${cellClassName}`]: cellClassName, // cell className
+          [`${column.className}`]: column.className, // column className
           [`${this.prefixCls}-column-${column.align}`]: column.align,
-          [`${this.prefixCls}-hidden`]: (this.fixed === 'left' && column.fixed !== 'left') || (this.fixed === 'right' && column.fixed !== 'right') || (!this.fixed && column.fixed && (column.fixed === 'left' || column.fixed === 'right'))
-        }
+          [`${this.prefixCls}-hidden`]:
+            (this.fixed === "left" && column.fixed !== "left") ||
+            (this.fixed === "right" && column.fixed !== "right") ||
+            (!this.fixed &&
+              column.fixed &&
+              (column.fixed === "left" || column.fixed === "right")),
+        },
       ];
     },
     isPopperShow(column) {
-      return column.filters && ((!this.fixed && !column.fixed) || (this.fixed === 'left' && column.fixed === 'left') || (this.fixed === 'right' && column.fixed === 'right'));
+      return (
+        column.filters &&
+        ((!this.fixed && !column.fixed) ||
+          (this.fixed === "left" && column.fixed === "left") ||
+          (this.fixed === "right" && column.fixed === "right"))
+      );
     },
-    setCellWidth(column, index) {
-
-      let width = '';
+    setCellWidth(column) {
+      let width = "";
       if (column.width) {
         width = column.width;
-      }else if (this.columnsWidth && this.columnsWidth[column._index]) {
+      } else if (this.columnsWidth && this.columnsWidth[column._index]) {
         width = this.columnsWidth[column._index].width;
       }
       // if (this.head.length === index + 1 && top && this.$parent.bodyHeight !== 0) {
@@ -37,9 +41,8 @@ export const column = {
       //   const firstFixedIndex = this.columns.findIndex((col) => col.fixed === 'right');
       //   if (firstFixedIndex === index) width += this.$parent.scrollBarWidth;
       // }
-      if (width === '0') width = '';
+      if (width === "0") width = "";
       return width;
-
     },
     setCellStyle(thead, column, index) {
       let style = {};
@@ -47,8 +50,12 @@ export const column = {
         style.width = `${column.width}px`;
         if (column.fixed) {
           if (index) {
-            if ('left' === column.fixed) {
-              style.left = `${index > 1 ? thead[index - 1].width + (column.width / 2 + 10) : thead[index - 1].width}px`;
+            if ("left" === column.fixed) {
+              style.left = `${
+                index > 1
+                  ? thead[index - 1].width + (column.width / 2 + 10)
+                  : thead[index - 1].width
+              }px`;
               style.zIndex = thead.length - index;
             }
           }
@@ -56,7 +63,7 @@ export const column = {
       }
       return style;
     },
-  }
+  },
 };
 
 export const assist = {
@@ -100,10 +107,10 @@ export const assist = {
     },
     camelCase(name) {
       return name
-        .replace(CHARS_REGEXP, function (_, separator, letter, offset) {
+        .replace(/([:-_]+(.))/g, function (_, separator, letter, offset) {
           return offset ? letter.toUpperCase() : letter;
         })
-        .replace(HACKS_REGEXP, "Moz$1");
+        .replace(/^moz([A-Z])/, "Moz$1");
     },
     getStyle(element, styleName) {
       if (!element || !styleName) return null;
@@ -120,5 +127,5 @@ export const assist = {
         return element.style[styleName];
       }
     },
-  }
+  },
 };

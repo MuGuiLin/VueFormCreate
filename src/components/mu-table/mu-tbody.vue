@@ -29,6 +29,14 @@ export default {
     },
     columnsWidth: Object,
   },
+  methods: {
+    enter(i) {
+      this.$parent.handleMouseIn(i);
+    },
+    leave(i) {
+      this.$parent.handleMouseOut(i);
+    },
+  },
 };
 </script>
 
@@ -37,8 +45,14 @@ export default {
     <colgroup>
       <col v-for="(o, i) in thead" :key="i" :width="setCellWidth(o, i)" />
     </colgroup>
-    <tbody :class="`${prefix}-tbody`">
-      <tr v-for="(row, i) in tbody" :key="i">
+    <tbody :class="`${prefix}-tbody`" v-if="tbody.length">
+      <tr
+        v-for="(row, i) in tbody"
+        :key="i"
+        :class="row._isHover && 'tr-hover'"
+        @mouseenter.stop="enter(i)"
+        @mouseleave.stop="leave(i)"
+      >
         <td
           v-for="(col, j) in thead"
           :key="j"
@@ -53,6 +67,11 @@ export default {
             :checked="row._isChecked"
           ></mu-cells>
         </td>
+      </tr>
+    </tbody>
+    <tbody v-else>
+      <tr class="no-data">
+        <td rowspan="0" :colspan="thead.length">暂无数据</td>
       </tr>
     </tbody>
   </table>

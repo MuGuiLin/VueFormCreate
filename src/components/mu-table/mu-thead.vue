@@ -29,7 +29,7 @@ export default {
       this.$parent.selectAll(e.target.checked);
     },
     sorter(i, t) {
-      if (t === this.tbody[i]._sortType) {
+      if (t === this.thead[i]._sortType) {
         t = 0;
       }
       this.$parent.handleSort(i, t);
@@ -56,7 +56,12 @@ export default {
               o.title || "序号"
             }}</template>
             <template v-else-if="'selection' === o.type">
-              <input type="checkbox" class="checkbox" :checked="checked" @change="change" />
+              <input
+                type="checkbox"
+                class="checkbox"
+                :checked="checked"
+                @change="change"
+              />
             </template>
             <template v-else>
               {{ o.title }}
