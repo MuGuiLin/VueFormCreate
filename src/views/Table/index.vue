@@ -217,53 +217,47 @@ export default {
   created() {
     setTimeout(() => {
       this.data = [{
-        name: "John Brown",
-        age: 15,
-        address: "New York No. 1 Lake Park",
-        date: "2016-10-03",
-      },
-      {
-        name: "Jim Green",
-        age: 24,
-        address: "London No. 1 Lake Park",
-        date: "2016-10-01",
-      },
-      {
-        name: "Joe Black",
-        age: 30,
-        address: "Sydney No. 1 Lake Park",
-        date: "2016-10-02",
-      },
-      {
-        name: "Jon Snow",
-        age: 26,
-        address: "Ottawa No. 2 Lake Park",
-        date: "2016-10-04",
-      },
-      {
-        name: "John Brown",
-        age: 18,
-        address: "New York No. 1 Lake Park",
-        date: "2016-10-03",
-      },
-      {
-        name: "Jim Green",
-        age: 24,
-        address: "London No. 1 Lake Park",
-        date: "2016-10-01",
-      },
-      {
-        name: "Joe Black",
-        age: 30,
-        address: "Sydney No. 1 Lake Park",
-        date: "2016-10-02",
-      },
-      {
-        name: "Jon Snow",
-        age: 26,
-        address: "Ottawa No. 2 Lake Park",
-        date: "2016-10-04",
-      }];
+          name: "名字1",
+          age: 18,
+          address: "居住地址居住地址1",
+          status: "成功",
+          date: "2022-10-01",
+        },
+        {
+          name: "名字2",
+          age: 31,
+          address: "居住地址居住地址2",
+          status: "异常",
+          date: "2022-10-01",
+        },
+        {
+          name: "名字3",
+          age: 26,
+          address: "居住地址居住地址3",
+          status: "失败",
+          date: "2022-09-13",
+        },
+        {
+          name: "名字4",
+          age: 56,
+          address: "居住地址居住地址4",
+          status: "警告",
+          date: "2022-08-20",
+        },
+        {
+          name: "名字5",
+          age: 9,
+          address: "居住地址居住地址5",
+          status: "警告",
+          date: "2022-08-20",
+        },
+        {
+          name: "名字6",
+          age: 43,
+          address: "居住地址居住地址6",
+          status: "警告",
+          date: "2022-09-16",
+        },];
       this.loading = false;
     }, 3000);
   },
