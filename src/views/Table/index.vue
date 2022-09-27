@@ -112,30 +112,39 @@ export default {
           title: "姓名",
           width: 100,
           key: "name",
-          fixed: "left",
         },
         {
           title: "年龄",
           key: "age",
           sorter: true,
           sortable: true,
-
         },
         {
           title: "地址",
           key: "address",
         },
         {
+          title: "状态",
+          key: "status",
+          render: (h, params) => {
+            const color = ["#01BB90", "#F35353", "#FF8130", "#0099FF"];
+            return h(
+              "span",
+              { style: { color: color[parseInt(Math.random() * 4)] } },
+              params.row.status
+            );
+          },
+        },
+        {
           title: "日期",
           key: "date",
-          fixed: "right",
           sorter: true,
           sortable: true,
         },
         {
           title: "操作",
           fixed: "right",
-          width: 120,
+          width: 180,
           render: (h, params) => {
             return h(
               "div",
@@ -148,17 +157,9 @@ export default {
                 h(
                   "button",
                   {
-                    props: {
-                      type: "primary",
-                      size: "small",
-                    },
-                    style: {
-                      marginRight: "5px",
-                      color: "blue",
-                    },
                     on: {
-                      click: (e) => {
-                        console.log(params, h, e);
+                      click: () => {
+                        console.log(params);
                       },
                     },
                   },
@@ -167,33 +168,47 @@ export default {
                 h(
                   "button",
                   {
-                    props: {
-                      type: "success",
-                      size: "small",
-                    },
-                    style: {
-                      color: "green",
-                    },
+                    class: ["error"],
                     on: {
-                      click: (e) => {
-                        console.log(params, h, e);
+                      click: () => {
+                        console.log(params);
                       },
                     },
                   },
-                  "详情"
+                  "删除"
                 ),
+                // h(
+                //   "button",
+                //   {
+                //     class: ["success", "large"],
+                //     on: {
+                //       click: () => {
+                //         console.log(params);
+                //       },
+                //     },
+                //   },
+                //   "查看"
+                // ),
+                // h(
+                //   "button",
+                //   {
+                //     class: ["warning", "small"],
+                //     style: {
+                //       fontSize: "10px",
+                //     },
+                //     on: {
+                //       click: () => {
+                //         console.log(params);
+                //       },
+                //     },
+                //   },
+                //   "详情"
+                // ),
               ]
             );
           },
         },
       ],
-
-      // h('Icon', {
-      //   props: {
-      //     type: 'person'
-      //   }
-      // }),
-      // h("strong", params.row.age),
 
       data: [],
       loading: true,
