@@ -1,12 +1,15 @@
 <script>
 import MuRender from "./mu-render";
+import MuButton from "./mu-button";
+import MuCheckbox from "./mu-checkbox";
 export default {
   name: "mu-cells",
-  components: { MuRender },
+  components: { MuRender, MuButton, MuCheckbox },
   props: {
     row: Object,
     col: Object,
     index: Number,
+    disabled: Boolean,
     checked: {
       type: Boolean,
       default: false,
@@ -22,8 +25,9 @@ export default {
     // this.compile();
   },
   methods: {
-    change() {
-      this.$parent.$parent.toggleSelect(this.index);
+    click() {},
+    change(checked) {
+      this.$parent.$parent.toggleSelect(this.index, checked);
     },
     compile() {
       if (this.col.render) {
@@ -47,15 +51,15 @@ export default {
 
 <template>
   <div>
+    <mu-button v-if="0"></mu-button>
     <template v-if="'index' === col.type">
       {{ index + 1 }}
     </template>
     <template v-else-if="'selection' === col.type">
-      <input
-        type="checkbox"
-        class="checkbox"
+      <mu-checkbox
         :checked="checked"
-        @change="change"
+        :disabled="disabled"
+        @click.native.stop="click"
       />
     </template>
     <mu-render

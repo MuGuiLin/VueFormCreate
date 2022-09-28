@@ -125,7 +125,6 @@ export default {
       return data;
     },
     handleSort(index, type) {
-      console.log(this.head);
       for (let i in this.head) {
         this.head[i].sorter && (this.head[i]._sortType = 0);
       }
@@ -156,9 +155,9 @@ export default {
             .reduce((a, b) => a + b);
         } else {
           this.tableWidth =
-            (window.innerWidth ||
-              document.documentElement.clientWidth ||
-              document.body.clientWidth) ||
+            window.innerWidth ||
+            document.documentElement.clientWidth ||
+            document.body.clientWidth ||
             parseInt(this.getStyle(this.$el, "width")) - 1;
         }
         this.columnsWidth = {};
@@ -168,7 +167,9 @@ export default {
           if (allWidth)
             autoWidthIndex = this.cloneColumns.findIndex((cell) => !cell.width);
           if (this.body.length) {
-            const $td = this.$refs.tbody.$el.querySelectorAll("tbody tr")[0].querySelectorAll("td");
+            const $td = this.$refs.tbody.$el
+              .querySelectorAll("tbody tr")[0]
+              .querySelectorAll("td");
             for (let i = 0; i < $td.length; i++) {
               const column = this.cloneColumns[i];
               let width = parseInt(this.getStyle($td[i], "width"));
@@ -238,8 +239,8 @@ export default {
 </script>
 
 <template>
-  <article class="mu-table-wrapper">
-    <section :class="classs" :style="styles">
+  <article class="mu-table-wrapper" :style="styles">
+    <section :class="classs">
       <header :class="`${prefix}-head`">
         <mu-thead
           :prefix="prefix"

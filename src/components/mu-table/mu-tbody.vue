@@ -71,7 +71,7 @@ export default {
     </tbody>
     <tbody v-else>
       <tr class="no-data">
-        <td rowspan="0" :colspan="thead.length">暂无数据</td>
+        <td rowspan="1" :colspan="thead.length">暂无数据</td>
       </tr>
     </tbody>
   </table>

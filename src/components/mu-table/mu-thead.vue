@@ -1,8 +1,10 @@
 <script>
 import { column } from "./mu-public";
+import MuCheckbox from "./mu-checkbox";
 export default {
   name: "mu-thead",
   mixins: [column],
+  components: { MuCheckbox },
   props: {
     prefix: String,
     thead: {
@@ -17,7 +19,11 @@ export default {
         return [];
       },
     },
-    checked: Boolean,
+    checked: {
+      type: Boolean,
+      default: false,
+    },
+    disabled: Boolean,
     fixed: {
       type: [Boolean, String],
       default: false,
@@ -25,8 +31,9 @@ export default {
     columnsWidth: Object,
   },
   methods: {
-    change(e) {
-      this.$parent.selectAll(e.target.checked);
+    click() {},
+    change(checked) {
+      this.$parent.selectAll(checked);
     },
     sorter(i, t) {
       if (t === this.thead[i]._sortType) {
@@ -56,11 +63,10 @@ export default {
               o.title || "序号"
             }}</template>
             <template v-else-if="'selection' === o.type">
-              <input
-                type="checkbox"
-                class="checkbox"
+              <mu-checkbox
                 :checked="checked"
-                @change="change"
+                :disabled="disabled"
+                @click.native.stop="click"
               />
             </template>
             <template v-else>
